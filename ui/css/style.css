@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "ZCOOL QingKe HuangYou";
+  font-size: 28px;
+  margin: 0;
+  padding: 0;
+  color: #0e1111;
+  background-color: white;
+}
+
+.cont-grid {
+  /* Main schema of page */
+  display: grid;
+  grid-template-rows: 0.5fr 0.3fr 5fr;
+  grid-gap: 1em;
+}
+
+.nav-title {
+  grid-column: 1 / 5;
+  padding-right: 3em;
+  padding-left: 3em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: #0e1111;
+  opacity: 1;
+  display: grid;
+  grid-template-columns: 0.65fr 0.35fr;
+  grid-template-areas: "title about";
+}
+
+.main {
+  color: white;
+  justify-self: end;
+  align-self: center;
+  grid-area: "title";
+}
+
+a {
+  color: #3b44bfff;
+}
+
+a:hover {
+  font-weight: bold;
+}
+
+.about {
+  justify-self: end;
+  align-self: center;
+  grid-area: "about";
+}
+
+.user-sweep {
+  grid-column: 2 / 3;
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  /* display: inline-block; */
+  /* border-radius: 6px; */
+  border: solid 1px #0e1111;
+}
+
+.user-sweep:hover {
+  /* color: #3b444b; */
+  /* border: solid 6px; */
+  border: solid 3px;
+}
+
+.pressable {
+  border: solid 1px #0e1111;
+  /* border-radius: 6px; */
+  padding: 3px;
+  cursor: pointer;
+}
+
+.pressable:hover {
+  border: solid 3px;
+  font-weight: bold;
+}
+
+.dragtext {
+  display: inline-block;
+}
+
+.inputfile {
+  display: none;
+}
+
+.portrait {
+  padding: 0;
+  overflow: hidden;
+  grid-column: 1 / 5;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
+}
+
+/* TODO: Find also responsive showcase images */
+/* Mobiles */
+.flex-pic {
+  flex: 1 1 100%;
+  align-self: center;
+  justify-self: center;
+  diplay: block;
+}
+
+/* Tablets */
+@media (min-width: 950px) {
+  .flex-pic {
+    /* flex: 1; */
+    width: 50%;
+    flex-basis: 50%;
+  }
+  .cont-grid {
+    /* Main schema of page */
+    grid-template-columns: 2fr 2fr;
+  }
+}
+
+/* Computers */
+@media (min-width: 1000px) {
+  .flex-pic {
+    /* flex: 1; */
+    flex-basis: 33%;
+  }
+  .cont-grid {
+    /* Main schema of page */
+    grid-template-columns: 2fr 0.9fr 2fr;
+  }
+}
+
+.flex-img {
+  width: 60%;
+  border: solid 1px #0e1111;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,5 +1,5 @@
 {
-  "name": "dalted-js",
+  "name": "dalted",
   "version": "0.0.1",
   "description": "FSFE",
   "main": "app.js",
@@ -10,5 +10,18 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carrascomj/dalted.git"
+  },
+  "keywords": [
+    "web-server",
+    "clustering",
+    "color-blind"
+  ],
+  "bugs": {
+    "url": "https://github.com/carrascomj/dalted/issues"
+  },
+  "homepage": "https://github.com/carrascomj/dalted#readme"
 }
