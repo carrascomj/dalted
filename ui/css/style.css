@@ -109,7 +109,7 @@ a:hover {
 }
 
 /* Tablets */
-@media screen and (min-width: 786px) {
+@media screen and (min-device-width: 786px) {
   .flex-pic {
     /* flex: 1; */
     width: 50%;
@@ -122,7 +122,7 @@ a:hover {
 }
 
 /* Computers */
-@media screen and (min-width: 900px) {
+@media screen and (min-device-width: 900px) {
   .flex-pic {
     /* flex: 1; */
     flex-basis: 33%;
