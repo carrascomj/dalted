@@ -68,11 +68,34 @@ a:hover {
   border: solid 3px;
 }
 
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
 .pressable {
   border: solid 1px #0e1111;
   /* border-radius: 6px; */
   padding: 3px;
   cursor: pointer;
+}
+
+.go{
+  border: solid 1px #0e1111;
+  /* border-radius: 6px; */
+  padding: 3px;
+  cursor: pointer;
+  width: 6em;
+  opacity: 0;
 }
 
 .pressable:hover {
@@ -82,10 +105,6 @@ a:hover {
 
 .dragtext {
   display: inline-block;
-}
-
-.inputfile {
-  display: none;
 }
 
 .portrait {
