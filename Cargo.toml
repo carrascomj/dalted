@@ -1,5 +1,5 @@
 [package]
-name = 'rust_web_app_2_undefined_path'
+name = 'dalted'
 version = "0.1.0"
 authors = ["$www.steadylearner.com"]
 edition = "2018"
