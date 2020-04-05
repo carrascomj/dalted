@@ -2,10 +2,11 @@ var target_brows = document.getElementById("fileb");
 var img1 = document.getElementById("img1");
 var img2 = document.getElementById("img2");
 var img3 = document.getElementById("img3");
+var img4 = document.getElementById("img4");
+var img5 = document.getElementById("img5");
+var img6 = document.getElementById("img6");
 
 target_brows.addEventListener('change', loadDoc);
-img1.addEventListener('change', () => {console.log("hall1");});
-img1.addEventListener('change', () => {console.log("hall2");});
 
 // check type
 var fileTypes = [
@@ -41,9 +42,12 @@ function loadDoc(event) {
         if(xhr.status === 200) {
           console.log("Received stuff");
           var data = JSON.parse(xhr.responseText);
-          img1.src = "data:image/png;base64," + data.images[0];
-          img2.src = "data:image/png;base64," + data.images[1];
-          img3.src = "data:image/png;base64," + data.images[2];
+          img1.src = "data:image/png;base64," + fr.result.slice((fr.result.indexOf("base64")+7),-1);
+          img2.src = "data:image/png;base64," + data.images[0];
+          img3.src = "data:image/png;base64," + data.images[1];
+          img4.src = "data:image/png;base64," + data.images[2];
+          img5.src = "data:image/png;base64," + data.images[3];
+          img6.src = "data:image/png;base64," + data.images[4];
         } else {
           console.log("Some error:");
           console.log(xhr.responseText);
