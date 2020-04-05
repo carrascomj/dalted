@@ -1,8 +1,11 @@
 var target_brows = document.getElementById("fileb");
 var img1 = document.getElementById("img1");
+var img2 = document.getElementById("img2");
+var img3 = document.getElementById("img3");
 
 target_brows.addEventListener('change', loadDoc);
 img1.addEventListener('change', () => {console.log("hall1");});
+img1.addEventListener('change', () => {console.log("hall2");});
 
 // check type
 var fileTypes = [
@@ -39,6 +42,8 @@ function loadDoc(event) {
           console.log("Received stuff");
           var data = JSON.parse(xhr.responseText);
           img1.src = "data:image/png;base64," + data.images[0];
+          img2.src = "data:image/png;base64," + data.images[1];
+          img3.src = "data:image/png;base64," + data.images[2];
         } else {
           console.log("Some error:");
           console.log(xhr.responseText);
