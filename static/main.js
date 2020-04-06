@@ -31,6 +31,20 @@ function loadDoc(event) {
   // event.preventDefault();
   var file = target_brows.files[0];
   if (validFileType(file)) {
+    // clear previous images...
+    img1.src = "";
+    img2.src = "";
+    img3.src = "";
+    img4.src = "";
+    img5.src = "";
+    img6.src = "";
+    // ...and let the user know that things are moving
+    img1.alt = "Transforming...";
+    img2.alt = "Transforming...";
+    img3.alt = "Transforming...";
+    img4.alt = "Transforming...";
+    img5.alt = "Transforming...";
+    img6.alt = "Transforming...";
     var fr = new FileReader();
     fr.onloadend = function () {
       var xhr = new XMLHttpRequest();
@@ -52,7 +66,12 @@ function loadDoc(event) {
           img5.src = "data:image/png;base64," + data.images[3];
           img6.src = "data:image/png;base64," + data.images[4];
         } else {
-          console.log("Some error:");
+          img1.alt = "Error ocurred";
+          img2.alt = "Error ocurred";
+          img3.alt = "Error ocurred";
+          img4.alt = "Error ocurred";
+          img5.alt = "Error ocurred";
+          img6.alt = "Error ocurred";
           console.log(xhr.responseText);
         }
       }
