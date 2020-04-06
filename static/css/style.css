@@ -18,6 +18,14 @@ body {
   grid-gap: 1em;
 }
 
+.cont-grid-about {
+  /* Main schema of page */
+  display: grid;
+  color: #e0e2cc;
+  grid-template-rows: 0.5fr 5.3fr;
+  grid-gap: 1em;
+}
+
 .nav-title {
   grid-column: 1 / 5;
   padding-right: 3em;
@@ -120,6 +128,16 @@ a:hover {
   justify-content: space-around;
 }
 
+.portrait-content {
+  padding: 0;
+  margin: 2em;
+  grid-column: 1 / 5;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+}
+
 /* TODO: Find also responsive showcase images */
 /* Mobiles */
 .flex-pic {
@@ -129,12 +147,22 @@ a:hover {
   diplay: block;
 }
 
+.portrait-content>div {
+  flex: 1 1 100%;
+  justify-self: center;
+  diplay: block;
+}
+
+
 /* Tablets */
 @media screen and (min-device-width: 786px) {
   .flex-pic {
     /* flex: 1; */
     width: 50%;
     flex-basis: 50%;
+  }
+  .portrait-content>div {
+    flex: 0 50%;
   }
   .cont-grid {
     /* Main schema of page */
