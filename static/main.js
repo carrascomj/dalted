@@ -35,14 +35,17 @@ function loadDoc(event) {
     fr.onloadend = function () {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "/img_upload");
-      console.log(fr.result);
       xhr.onload = function(e) {
         //The response of the upload
         xhr.responseText;
         if(xhr.status === 200) {
-          console.log("Received stuff");
           var data = JSON.parse(xhr.responseText);
-          img1.src = "data:image/png;base64," + fr.result.slice((fr.result.indexOf("base64")+7),-1);
+          let original = fr.result;
+          console.log(original);
+          if (file.type === "image/jpeg") {
+            original = "data:image/png;base64," + original.slice((original.indexOf("base64")+7),-1)
+          }
+          img1.src = original;
           img2.src = "data:image/png;base64," + data.images[0];
           img3.src = "data:image/png;base64," + data.images[1];
           img4.src = "data:image/png;base64," + data.images[2];
