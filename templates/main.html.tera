@@ -6,9 +6,7 @@
         <meta name=viewport content="width=device-width,initial-scale=1">
         <meta http-equiv=X-UA-Compatible content="ie=edge">
         <meta name=author content=steadylearner>
-        <title>Rust Rocket for beginners by steadylearner</title>
-        <link rel="stylesheet" href="/static/main.css">
-        <title>{% block title %} Steadylearner Website {% endblock title %}</title>
+        <title>{% block title %} Dalted {% endblock title %}</title>
         {% block css %}<link rel="stylesheet" href="/static/css/custom.css">{% endblock css %}
     </head>
     <body>
