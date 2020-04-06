@@ -8,7 +8,7 @@ body {
   margin: 0;
   padding: 0;
   color: #0e1111;
-  background-color: white;
+  background-color:  #353335;
 }
 
 .cont-grid {
@@ -23,8 +23,7 @@ body {
   padding-right: 3em;
   padding-left: 3em;
   padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  background-color: #0e1111;
+  /* background-color: #0e1111; */
   opacity: 1;
   display: grid;
   grid-template-columns: 0.65fr 0.35fr;
@@ -39,7 +38,7 @@ body {
 }
 
 a {
-  color: #3b44bfff;
+  color: #3bb477;
 }
 
 a:hover {
@@ -59,7 +58,9 @@ a:hover {
   justify-content: center;
   /* display: inline-block; */
   /* border-radius: 6px; */
-  border: solid 1px #0e1111;
+  color: #e0e2cc;
+  background-color: #3b7682;
+  border: solid 1px #e0e2cc;
 }
 
 .user-sweep:hover {
@@ -83,7 +84,8 @@ a:hover {
 }
 
 .pressable {
-  border: solid 1px #0e1111;
+  color: #e0e2cc;
+  border: solid 1px #e0e2cc;
   /* border-radius: 6px; */
   padding: 3px;
   cursor: pointer;
@@ -155,6 +157,7 @@ a:hover {
 .flex-img {
   width: 60%;
   border: solid 1px #0e1111;
+  background-color: #e0e2cc;
   display: block;
   margin-left: auto;
   margin-right: auto;
