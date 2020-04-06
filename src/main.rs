@@ -21,7 +21,6 @@ fn rocket() -> rocket::Rocket {
             routes![
                 static_files::file,
                 get::index,
-                get::single_page_app,
                 post::upload,
             ],
         )

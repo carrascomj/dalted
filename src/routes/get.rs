@@ -5,10 +5,3 @@ use rocket::response::{NamedFile};
 pub fn index() -> io::Result<NamedFile> {
     NamedFile::open("static/index.html")
 }
-
-#[get("/share")]
-pub fn single_page_app() -> io::Result<NamedFile> {
-    NamedFile::open("static/build/index.html")
-}
-
-

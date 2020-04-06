@@ -9,4 +9,3 @@ pub fn not_found(req: &Request) -> Template {
 }
 
 // https://api.rocket.rs/rocket_contrib/struct.Template.html
-
