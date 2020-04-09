@@ -3,24 +3,30 @@ use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgb};
 use imageproc::map::map_colors;
+use std::error::Error;
 use std::io::Cursor;
 
-pub fn pipe_matrix_multiplication(raw_data: String) -> Vec<String> {
-    let reader = Reader::new(Cursor::new(decode(raw_data).unwrap()))
+/// Transform an image by applyng 5 matrix transformation that correspond to different types of
+/// color blidness.
+/// The return type is a Result so that the errors can be communicated to the client.
+/// # References
+/// - Vietnol el al, 1999 http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf
+/// - Explanatory post https://ixora.io/projects/colorblindness/color-blindness-simulation-research/
+pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<dyn Error>> {
+    let reader = Reader::new(Cursor::new(decode(raw_data)?))
         .with_guessed_format()
         .expect("hhh.");
-    let img = reader.decode().unwrap();
+    let img = reader.decode()?;
 
     let mut transformed: Vec<String> = vec![];
     for matrix in MATRICES.iter() {
-        transformed.push(color_filter(&img, matrix))
+        transformed.push(color_filter(&img, matrix)?)
     }
-    transformed
+    Ok(transformed)
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
-/// See https://ixora.io/projects/colorblindness/color-blindness-simulation-research/
-fn color_filter(img: &DynamicImage, filter: &KERNEL) -> String {
+fn color_filter(img: &DynamicImage, filter: &KERNEL) -> Result<String, Box<dyn Error>> {
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgb8(map_colors(img, |p| {
         let r = remove_gamma(&(p[0] as f32));
@@ -32,9 +38,8 @@ fn color_filter(img: &DynamicImage, filter: &KERNEL) -> String {
             gamma_correction(filter[6] * r + filter[7] * g + filter[8] * b),
         ])
     }))
-    .write_to(&mut image_png, image::ImageOutputFormat::Png)
-    .unwrap();
-    encode(image_png).to_string()
+    .write_to(&mut image_png, image::ImageOutputFormat::Png)?;
+    Ok(encode(image_png).to_string())
 }
 
 /// Transform RGB in [0, 255] to linear RGB [0, 1]

@@ -66,12 +66,12 @@ function loadDoc(event) {
           img5.src = "data:image/png;base64," + data.images[3];
           img6.src = "data:image/png;base64," + data.images[4];
         } else {
-          img1.alt = "Error ocurred";
-          img2.alt = "Error ocurred";
-          img3.alt = "Error ocurred";
-          img4.alt = "Error ocurred";
-          img5.alt = "Error ocurred";
-          img6.alt = "Error ocurred";
+          img1.alt = "Image could not be parsed";
+          img2.alt = "Image could not be parsed";
+          img3.alt = "Image could not be parsed";
+          img4.alt = "Supported: PNG, JPG, JPEG";
+          img5.alt = "Supported: PNG, JPG, JPEG";
+          img6.alt = "Supported: PNG, JPG, JPEG";
           console.log(xhr.responseText);
         }
       }
