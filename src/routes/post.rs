@@ -1,4 +1,4 @@
-use crate::image_proocessing::pipe_transform::pipe_matrix_multiplication;
+use crate::image_processing::pipe_transform::pipe_matrix_multiplication;
 use rocket_contrib::json::Json;
 
 #[derive(Deserialize)]

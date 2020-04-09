@@ -6,7 +6,7 @@ extern crate serde_derive;
 
 extern crate tera;
 
-mod image_proocessing;
+mod image_processing;
 mod routes;
 use crate::routes::{errors, get, post, static_files};
 
