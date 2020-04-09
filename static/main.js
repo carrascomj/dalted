@@ -1,4 +1,5 @@
 var target_brows = document.getElementById("fileb");
+var target_drag = document.getElementById("box");
 var img1 = document.getElementById("img1");
 var img2 = document.getElementById("img2");
 var img3 = document.getElementById("img3");
@@ -6,11 +7,37 @@ var img4 = document.getElementById("img4");
 var img5 = document.getElementById("img5");
 var img6 = document.getElementById("img6");
 
-target_brows.addEventListener('change', loadDoc);
+// CLICK SUBMIT
+target_brows.addEventListener('change', function(event){
+    event.preventDefault();
+    loadDoc(target_brows);
+});
+
+// DRAG AND DROP
+document.body.addEventListener("dragover", function(event){
+    event.preventDefault();
+});
+document.body.addEventListener("drop", function(event){
+    event.preventDefault();
+});
+target_drag.addEventListener("dragover", function(event) {
+    // prevent default on box and change color
+    event.preventDefault();
+    target_drag.style.backgroundColor = "#3bb477";
+}, false);
+target_drag.addEventListener("drop", function(event) {
+
+    // cancel default actions
+    event.preventDefault();
+    // restore default when drop
+    target_drag.style.backgroundColor = "#3b7682";
+    loadDoc(event.dataTransfer);
+}, false);
 
 // check type
 var fileTypes = [
   'image/jpeg',
+  'image/jpg',
   'image/pjpeg',
   'image/png',
   'image/svg'
@@ -26,10 +53,10 @@ function validFileType(file) {
 }
 
 // POST REQUEST TO SERVER: upload image
-function loadDoc(event) {
+function loadDoc(target) {
   // cancel default actions
   // event.preventDefault();
-  var file = target_brows.files[0];
+  var file = target.files[0];
   if (validFileType(file)) {
     // clear previous images...
     img1.src = "";
