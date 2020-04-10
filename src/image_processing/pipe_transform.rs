@@ -1,4 +1,4 @@
-use crate::image_processing::matrices::{Kernel, Vec3, Matops3, MATRICES};
+use crate::image_processing::matrices::{Kernel, Matops3, Vec3, MATRICES};
 use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgb};
@@ -13,8 +13,7 @@ use std::io::Cursor;
 /// - Vietnol el al, 1999 http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf
 /// - Explanatory post https://ixora.io/projects/colorblindness/color-blindness-simulation-research/
 pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<dyn Error>> {
-    let reader = Reader::new(Cursor::new(decode(raw_data)?))
-        .with_guessed_format()?;
+    let reader = Reader::new(Cursor::new(decode(raw_data)?)).with_guessed_format()?;
     let img = reader.decode()?;
 
     let mut transformed: Vec<String> = vec![];
@@ -25,7 +24,7 @@ pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<d
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
-fn color_filter(img: &DynamicImage, matrix: &Kernel<f32>) -> Result<String, Box<dyn Error>> {
+pub fn color_filter(img: &DynamicImage, matrix: &Kernel<f32>) -> Result<String, Box<dyn Error>> {
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgb8(map_colors(img, |p| {
         let v = matrix
@@ -60,5 +59,26 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
         255.0
     } else {
         res
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::image_processing::matrices::Kernel;
+
+    #[test]
+    fn test_color_filter() {
+        let ground = "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFUlEQVR4nGMUVNB6/+AaIwMDA5AFABzRA177FJQYAAAAAElFTkSuQmCC";
+        let raw_data = b"P1 2 2\n\
+            0 1\n\
+            1 0\n";
+        let rgb = Reader::new(Cursor::new(raw_data))
+            .with_guessed_format()
+            .unwrap()
+            .decode()
+            .unwrap();
+        let kernel = Kernel::new([1., 2., 3., 4., 5., 6., 7., 8., 9.]);
+        assert_eq!(color_filter(&rgb, &kernel).unwrap(), ground)
     }
 }
