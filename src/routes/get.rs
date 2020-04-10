@@ -1,5 +1,5 @@
+use rocket::response::NamedFile;
 use std::io;
-use rocket::response::{NamedFile};
 
 #[get("/")]
 pub fn index() -> io::Result<NamedFile> {
