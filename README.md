@@ -1,6 +1,5 @@
 ![alt text](./static/img/logo_git.svg "Dalted logo black")  
 ![MSRV](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
-![Prettier for JS Code](https://github.com/carrascomj/dalted/workflows/Prettier%20for%20JS%20Code/badge.svg?branch=master)
 
 # What is Dalted?
 
