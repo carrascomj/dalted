@@ -23,7 +23,7 @@ pub fn upload(image: Json<Image>) -> Result<Json<Images>, status::Custom<String>
     match pipe_matrix_multiplication(image.0.image) {
         Ok(images) => Ok(Json(Images {
             file_type: image.0.file_type,
-            images: images,
+            images,
             message: format!("Passed message: {}", image.0.message),
         })),
         Err(_) => Err(status::Custom(

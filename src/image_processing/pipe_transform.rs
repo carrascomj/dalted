@@ -28,28 +28,28 @@ pub fn color_filter(img: &DynamicImage, matrix: &Kernel<f32>) -> Result<String, 
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgb8(map_colors(img, |p| {
         let v = matrix
-            .vecmul(Vec3::<f32>::from(p.0).apply(|x| remove_gamma(&x)))
-            .apply(|x| gamma_correction(x))
+            .vecmul(Vec3::<f32>::from(p.0).apply(remove_gamma))
+            .apply(gamma_correction)
             .cont();
         Rgb([v[0] as u8, v[1] as u8, v[2] as u8])
     }))
     .write_to(&mut image_png, image::ImageOutputFormat::Png)?;
-    Ok(encode(image_png).to_string())
+    Ok(encode(image_png))
 }
 
 /// Transform RGB in [0, 255] to linear RGB [0, 1]
-fn remove_gamma(rgb_a: &f32) -> f32 {
-    if rgb_a > &0.04045 {
-        (rgb_a / 269.025 + 0.0521327).powf(2.4)
+fn remove_gamma(rgb_a: f32) -> f32 {
+    if rgb_a > 0.04045 {
+        (rgb_a / 269.025 + 0.052_132_7).powf(2.4)
     } else {
-        rgb_a / 19.7368421
+        rgb_a / 19.73684
     }
 }
 
 /// Transform linear RGB [0, 1] back to RGB in [0, 255]
 fn gamma_correction(rgb_linear: f32) -> f32 {
     let res;
-    if rgb_linear > 0.0031308 {
+    if rgb_linear > 0.003_130_8 {
         res = 269.025 * rgb_linear.powf(0.41666) - 14.025
     } else {
         res = 3294.6 * rgb_linear
