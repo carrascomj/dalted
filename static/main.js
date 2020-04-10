@@ -8,48 +8,55 @@ var img5 = document.getElementById("img5");
 var img6 = document.getElementById("img6");
 
 // CLICK SUBMIT
-target_brows.addEventListener('change', function(event){
-    event.preventDefault();
-    loadDoc(target_brows);
+target_brows.addEventListener("change", function(event) {
+  event.preventDefault();
+  loadDoc(target_brows);
 });
 
 // DRAG AND DROP
-document.body.addEventListener("dragover", function(event){
-    event.preventDefault();
+document.body.addEventListener("dragover", function(event) {
+  event.preventDefault();
 });
-document.body.addEventListener("drop", function(event){
-    event.preventDefault();
+document.body.addEventListener("drop", function(event) {
+  event.preventDefault();
 });
-target_drag.addEventListener("dragover", function(event) {
+target_drag.addEventListener(
+  "dragover",
+  function(event) {
     // prevent default on box and change color
     event.preventDefault();
     target_drag.style.backgroundColor = "#3bb477";
-}, false);
-target_drag.addEventListener("drop", function(event) {
-
+  },
+  false
+);
+target_drag.addEventListener(
+  "drop",
+  function(event) {
     // cancel default actions
     event.preventDefault();
     // restore default when drop
     target_drag.style.backgroundColor = "#3b7682";
     loadDoc(event.dataTransfer);
-}, false);
+  },
+  false
+);
 
 // check type
 var fileTypes = [
-  'image/jpeg',
-  'image/jpg',
-  'image/pjpeg',
-  'image/png',
-  'image/svg'
-]
+  "image/jpeg",
+  "image/jpg",
+  "image/pjpeg",
+  "image/png",
+  "image/svg"
+];
 
 function validFileType(file) {
-    for(var i = 0; i < fileTypes.length; i++) {
-        if(file.type === fileTypes[i]) {
-            return true;
-        }
+  for (var i = 0; i < fileTypes.length; i++) {
+    if (file.type === fileTypes[i]) {
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 // POST REQUEST TO SERVER: upload image
@@ -73,18 +80,20 @@ function loadDoc(target) {
     img5.alt = "Transforming...";
     img6.alt = "Transforming...";
     var fr = new FileReader();
-    fr.onloadend = function () {
+    fr.onloadend = function() {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "/img_upload");
       xhr.onload = function(e) {
         //The response of the upload
         xhr.responseText;
-        if(xhr.status === 200) {
+        if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
           let original = fr.result;
           console.log(original);
           if (file.type === "image/jpeg") {
-            original = "data:image/png;base64," + original.slice((original.indexOf("base64")+7),-1)
+            original =
+              "data:image/png;base64," +
+              original.slice(original.indexOf("base64") + 7, -1);
           }
           img1.src = original;
           img2.src = "data:image/png;base64," + data.images[0];
@@ -101,15 +110,17 @@ function loadDoc(target) {
           img6.alt = "Supported: PNG, JPG, JPEG";
           console.log(xhr.responseText);
         }
-      }
+      };
 
-      xhr.send(JSON.stringify({
-        "file_type": file.type,
-        "image": fr.result.slice((fr.result.indexOf("base64")+7),-1),
-        // "image": fr.result,
-        "message": "Apples",
-      }));
-    }
+      xhr.send(
+        JSON.stringify({
+          file_type: file.type,
+          image: fr.result.slice(fr.result.indexOf("base64") + 7, -1),
+          // "image": fr.result,
+          message: "Apples"
+        })
+      );
+    };
     fr.readAsDataURL(file);
   }
 }
