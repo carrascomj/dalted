@@ -1,5 +1,9 @@
-![alt text](./static/img/logo_git.svg "Dalted logo black")
+![alt text](./static/img/logo_git.svg "Dalted logo black")  
+![MSRV](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
+![Prettier for JS Code](https://github.com/carrascomj/dalted/workflows/Prettier%20for%20JS%20Code/badge.svg?branch=master)
+
 # What is Dalted?
+
 Web-app hosted at https://dalted.tech to simulate different types of color blindness from an user-provided input image.
 
 ## Resources
@@ -13,8 +17,8 @@ Web-app hosted at https://dalted.tech to simulate different types of color blind
 
 Licensed under either of
 
- * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
 
