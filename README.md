@@ -27,7 +27,7 @@ Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
 additional terms or conditions.
 
-## Run on local
+## Run locally
 
 The backend runs on Rust nightly ([Rocket](https://rocket.rs/)). Thus, the first step is to [install
 Rust](https://www.rust-lang.org/tools/install):

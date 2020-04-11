@@ -1,2 +1,3 @@
-pub mod matrices;
-pub mod pipe_transform;
+mod pipe_transform;
+mod matrices;
+pub use pipe_transform::pipe_matrix_multiplication;

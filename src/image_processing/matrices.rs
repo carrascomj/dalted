@@ -21,6 +21,9 @@ const ACHROMATOPSIA: Mat3x3 = [
     0.072_186,
 ];
 
+/// Matrices to be applied to a linear RGB vector to simulate color blindness.
+/// Each matrix `M` is $M = T  S T^{-1}$ where T is the linear transformation from
+/// linear RGB (0,1) to LMS and S is the color blindness filter.
 pub const MATRICES: [Mat3x3; 5] = [
     PRONATOPIA,
     DEUTERANOPIA,
@@ -29,6 +32,21 @@ pub const MATRICES: [Mat3x3; 5] = [
     ACHROMATOPSIA,
 ];
 
+
+/// Kernel is a (stacked) square 3x3 matrix. Simple interface to apply color filters.
+/// K is used by pipe_transform as an f32
+///
+/// # Examples
+/// ```rust
+/// use dalted::image_processing::Kernel
+///
+/// let ex_k = Kernel::new([1u8, 2, 3, 4, 5, 6, 7, 8, 9]);
+/// let ex_s = Kernel::new([9u8, 2, 3, 0, 5, 6, 1, 8, 9]);
+/// assert_eq!(
+///     Kernel::new([12, 36, 42, 42, 81, 96, 72, 126, 150]).matrix,
+///     (ex_k * ex_s).matrix
+/// );
+/// ```
 #[derive(Debug)]
 pub struct Kernel<T> {
     matrix: [T; 9],
@@ -40,7 +58,7 @@ impl<T> Kernel<T> {
     }
 }
 
-// dot product
+// Dot product
 impl<T: Mul<T, Output = T> + Add<T, Output = T> + Copy> Mul for Kernel<T> {
     type Output = Kernel<T>;
 
@@ -60,6 +78,7 @@ impl<T: Mul<T, Output = T> + Add<T, Output = T> + Copy> Mul for Kernel<T> {
     }
 }
 
+/// Vec3 is a (stacked) 3-lenght matrix. Simple interface to apply color filters.
 #[derive(Debug)]
 pub struct Vec3<T> {
     cont: [T; 3],
@@ -80,7 +99,7 @@ impl<T: std::convert::From<u8>> From<[u8; 4]> for Vec3<T> {
     }
 }
 
-/// matoperations for 3x3 matrices
+/// Operations for 3x3 matrices and 3x vectors
 pub trait Matops3<T: Copy + Mul<T, Output = T>> {
     fn vecmul(&self, vec: Vec3<T>) -> Vec3<T>;
     fn apply(&self, f: impl Fn(T) -> T) -> Self;

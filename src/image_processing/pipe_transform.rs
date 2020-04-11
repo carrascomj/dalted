@@ -1,4 +1,4 @@
-use crate::image_processing::matrices::{Kernel, Matops3, Vec3, MATRICES};
+use super::matrices::{Kernel, Matops3, Vec3, MATRICES};
 use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgb};

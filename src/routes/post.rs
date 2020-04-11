@@ -1,4 +1,4 @@
-use crate::image_processing::pipe_transform::pipe_matrix_multiplication;
+use crate::image_processing::pipe_matrix_multiplication;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket_contrib::json::Json;
