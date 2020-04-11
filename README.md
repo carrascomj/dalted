@@ -1,5 +1,5 @@
 ![alt text](./static/img/logo_git.svg "Dalted logo black")  
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcarrascomj%2Fdalted%2Fbadge&style=flat-square)](https://actions-badge.atrox.dev/carrascomj/dalted/goto)
+![MSRV](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
 
 # What is Dalted?
 
