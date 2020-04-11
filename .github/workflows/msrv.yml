@@ -1,6 +1,24 @@
 # Based on https://github.com/actions-rs/meta/blob/master/recipes/msrv.md
 
-on: [push, pull_request]
+on:
+  push:
+    # Ignore bors branches, since they are covered by `clippy_bors.yml`
+    branches-ignore:
+      - auto
+      - try
+    # Don't run Clippy tests, when only textfiles were modified
+    paths-ignore:
+      - "COPYRIGHT"
+      - "LICENSE-*"
+      - "**.md"
+      - "**.txt"
+  pull_request:
+    # Don't run Clippy tests, when only textfiles were modified
+    paths-ignore:
+      - "COPYRIGHT"
+      - "LICENSE-*"
+      - "**.md"
+      - "**.txt"
 
 name: MSRV
 
