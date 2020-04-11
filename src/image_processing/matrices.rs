@@ -32,7 +32,6 @@ pub const MATRICES: [Mat3x3; 5] = [
     ACHROMATOPSIA,
 ];
 
-
 /// Kernel is a (stacked) square 3x3 matrix. Simple interface to apply color filters.
 /// K is used by pipe_transform as an f32
 ///
