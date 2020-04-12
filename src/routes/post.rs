@@ -26,9 +26,9 @@ pub fn upload(image: Json<Image>) -> Result<Json<Images>, status::Custom<String>
             images,
             message: format!("Passed message: {}", image.0.message),
         })),
-        Err(_) => Err(status::Custom(
+        Err(e) => Err(status::Custom(
             Status::NotAcceptable,
-            String::from("Image couldn't be parsed!"),
+            String::from(format!("{:?}", e)),
         )),
     }
 }

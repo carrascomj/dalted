@@ -89,7 +89,6 @@ function loadDoc(target) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
           let original = fr.result;
-          console.log(original);
           if (file.type === "image/jpeg") {
             original =
               "data:image/png;base64," +
@@ -103,12 +102,11 @@ function loadDoc(target) {
           img6.src = "data:image/png;base64," + data.images[4];
         } else {
           img1.alt = "Image could not be parsed";
-          img2.alt = "Image could not be parsed";
-          img3.alt = "Image could not be parsed";
-          img4.alt = "Supported: PNG, JPG, JPEG";
+          img3.alt = xhr.responseText;
+          img2.alt = "Reason ----------------------->";
+          img4.alt = "Is image too large?";
           img5.alt = "Supported: PNG, JPG, JPEG";
           img6.alt = "Supported: PNG, JPG, JPEG";
-          console.log(xhr.responseText);
         }
       };
 
@@ -116,7 +114,7 @@ function loadDoc(target) {
         JSON.stringify({
           file_type: file.type,
           image: fr.result.slice(fr.result.indexOf("base64") + 7, -1),
-          // "image": fr.result,
+          // image: fr.result,
           message: "Apples"
         })
       );

@@ -18,7 +18,7 @@ use rocket_contrib::templates::Template;
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .attach(Template::fairing())
-        .mount("/", routes![static_files::file, get::index, post::upload,])
+        .mount("/", routes![static_files::file, get::index, post::upload])
         .register(catchers![errors::not_found])
 }
 
