@@ -28,7 +28,7 @@ pub fn upload(image: Json<Image>) -> Result<Json<Images>, status::Custom<String>
         })),
         Err(e) => Err(status::Custom(
             Status::NotAcceptable,
-            String::from(format!("{:?}", e)),
+            format!("{:?}", e),
         )),
     }
 }

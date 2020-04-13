@@ -32,9 +32,9 @@ pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, B
             p
         } else {
             let v = matrix
-            .vecmul(Vec3::<f32>::from(p.0).apply(remove_gamma))
-            .apply(gamma_correction)
-            .cont();
+                .vecmul(Vec3::<f32>::from(p.0).apply(remove_gamma))
+                .apply(gamma_correction)
+                .cont();
             Rgba([v[0] as u8, v[1] as u8, v[2] as u8, p[3]])
         }
     }))
