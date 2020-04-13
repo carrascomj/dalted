@@ -1,7 +1,7 @@
 use super::matrices::{Kernel, Matops3, Vec3, MATRICES};
 use base64::{decode, encode};
 use image::io::Reader;
-use image::{DynamicImage, Rgb};
+use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
 use std::error::Error;
 use std::io::Cursor;
@@ -26,12 +26,17 @@ pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<d
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
 pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, Box<dyn Error>> {
     let mut image_png = Vec::<u8>::new();
-    DynamicImage::ImageRgb8(map_colors(img, |p| {
-        let v = matrix
+    DynamicImage::ImageRgba8(map_colors(img, |p| {
+        if p[3] == 0 {
+            // transformation is meaningless when opacity is 100%
+            p
+        } else {
+            let v = matrix
             .vecmul(Vec3::<f32>::from(p.0).apply(remove_gamma))
             .apply(gamma_correction)
             .cont();
-        Rgb([v[0] as u8, v[1] as u8, v[2] as u8])
+            Rgba([v[0] as u8, v[1] as u8, v[2] as u8, p[3]])
+        }
     }))
     .write_to(&mut image_png, image::ImageOutputFormat::Png)?;
     Ok(encode(image_png))
