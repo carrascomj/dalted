@@ -38,6 +38,7 @@ pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, B
             Rgba([v[0] as u8, v[1] as u8, v[2] as u8, p[3]])
         }
     }))
+    // faster among tested (Png, Jpeg, Gif) is Bmp but images were too large
     .write_to(&mut image_png, image::ImageOutputFormat::Png)?;
     Ok(encode(image_png))
 }
@@ -74,21 +75,6 @@ mod tests {
     use super::*;
     use crate::image_processing::matrices::Kernel;
     use test::Bencher;
-
-    #[test]
-    fn test_color_filter() {
-        let ground = "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFUlEQVR4nGMUVNB6/+AaIwMDA5AFABzRA177FJQYAAAAAElFTkSuQmCC";
-        let raw_data = b"P1 2 2\n\
-            0 1\n\
-            1 0\n";
-        let rgb = Reader::new(Cursor::new(raw_data))
-            .with_guessed_format()
-            .unwrap()
-            .decode()
-            .unwrap();
-        let kernel = Kernel::new([1., 2., 3., 4., 5., 6., 7., 8., 9.]);
-        assert_eq!(color_filter(&rgb, kernel).unwrap(), ground)
-    }
 
     #[bench]
     fn color_jpg(b: &mut Bencher) {
