@@ -8,7 +8,7 @@ body {
   margin: 0;
   padding: 0;
   color: #0e1111;
-  background-color:  #353335;
+  background-color: #353335;
 }
 
 .cont-grid {
@@ -83,7 +83,7 @@ a:hover {
   display: inline-block;
 }
 
-.upload-btn-wrapper input[type=file] {
+.upload-btn-wrapper input[type="file"] {
   font-size: 100px;
   position: absolute;
   left: 0;
@@ -99,7 +99,7 @@ a:hover {
   cursor: pointer;
 }
 
-.go{
+.go {
   border: solid 1px #0e1111;
   /* border-radius: 6px; */
   padding: 3px;
@@ -135,7 +135,6 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-
 }
 
 /* TODO: Find also responsive showcase images */
@@ -147,12 +146,11 @@ a:hover {
   diplay: block;
 }
 
-.portrait-content>div {
+.portrait-content > div {
   flex: 1 1 100%;
   justify-self: center;
   diplay: block;
 }
-
 
 /* Tablets */
 @media screen and (min-device-width: 786px) {
@@ -161,7 +159,7 @@ a:hover {
     width: 50%;
     flex-basis: 50%;
   }
-  .portrait-content>div {
+  .portrait-content > div {
     flex: 0 50%;
   }
   .cont-grid {
