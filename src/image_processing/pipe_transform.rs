@@ -63,33 +63,28 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//
-//     extern crate test;
-//     use super::*;
-//     use crate::image_processing::matrices::Kernel;
-//     use test::Bencher;
-//
-//     #[bench]
-//     fn color_jpg(b: &mut Bencher) {
-//         let image = Reader::open("tests/stickblind.jpg")
-//             .unwrap()
-//             .decode()
-//             .unwrap();
-//         b.iter(|| {
-//             color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
-//         });
-//     }
-//
-//     #[bench]
-//     fn color_png(b: &mut Bencher) {
-//         let image = Reader::open("tests/stickblind.png")
-//             .unwrap()
-//             .decode()
-//             .unwrap();
-//         b.iter(|| {
-//             color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
-//         });
-//     }
-// }
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+    use crate::image_processing::matrices::Kernel;
+    use image::io::Reader;
+
+    #[test]
+    fn color_jpg() {
+        let image = Reader::open("tests/stickblind.jpg")
+            .unwrap()
+            .decode()
+            .unwrap();
+        color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
+    }
+
+    #[test]
+    fn color_png() {
+        let image = Reader::open("tests/stickblind.png")
+            .unwrap()
+            .decode()
+            .unwrap();
+        color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
+    }
+}
