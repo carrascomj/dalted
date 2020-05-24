@@ -1,9 +1,7 @@
 extern crate actix_web;
 #[macro_use]
 extern crate serde_derive;
-
-extern crate tera;
-
+#[warn(unused_extern_crates)]
 mod image_processing;
 mod routes;
 use crate::routes::{errors, get, post};
