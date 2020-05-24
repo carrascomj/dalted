@@ -1,12 +1,16 @@
-use rocket::response::NamedFile;
-use std::io;
+use actix_web::{get, HttpResponse, Result};
+use actix_web::http::{StatusCode};
 
 #[get("/")]
-pub fn index() -> io::Result<NamedFile> {
-    NamedFile::open("static/index.html")
+pub async fn index() -> Result<HttpResponse> {
+    Ok(HttpResponse::build(StatusCode::OK)
+        .content_type("text/html; charset=utf-8")
+        .body(include_str!("../../static/index.html")))
 }
 
 #[get("/robots.txt")]
-pub fn robots() -> io::Result<NamedFile> {
-    NamedFile::open("static/robots.txt")
+pub async fn robots() -> Result<HttpResponse> {
+    Ok(HttpResponse::build(StatusCode::OK)
+        .content_type("text/plain")
+        .body(include_str!("../../static/robots.txt")))
 }
