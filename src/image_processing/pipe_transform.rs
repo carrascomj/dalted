@@ -1,10 +1,7 @@
 use super::matrices::{Kernel, Matops3, Vec3, MATRICES};
-use base64::{decode, encode};
-use image::io::Reader;
+use base64::encode;
 use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
-use std::error::Error;
-use std::io::Cursor;
 
 /// Transform an image by applyng 5 matrix transformation that correspond to different types of
 /// color blidness.
@@ -12,19 +9,16 @@ use std::io::Cursor;
 /// # References
 /// - Vietnol el al, 1999 http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf
 /// - Explanatory post https://ixora.io/projects/colorblindness/color-blindness-simulation-research/
-pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<dyn Error>> {
-    let reader = Reader::new(Cursor::new(decode(raw_data)?)).with_guessed_format()?;
-    let img = reader.decode()?;
-
+pub fn pipe_matrix_multiplication(img: &DynamicImage) -> Result<Vec<String>, Box<dyn std::error::Error + Send + 'static>> {
     let mut transformed: Vec<String> = vec![];
     for matrix in MATRICES.iter() {
-        transformed.push(color_filter(&img, Kernel::<f32>::new(*matrix))?);
+        transformed.push(color_filter(&img, Kernel::<f32>::new(*matrix)).unwrap());
     }
     Ok(transformed)
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
-pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, Box<dyn Error>> {
+pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, Box<dyn std::error::Error + Send + 'static>> {
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgba8(map_colors(img, |p| {
         if p[3] == 0 {
@@ -39,7 +33,8 @@ pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, B
         }
     }))
     // faster among tested (Png, Jpeg, Gif) is Bmp but images were too large
-    .write_to(&mut image_png, image::ImageOutputFormat::Png)?;
+    .write_to(&mut image_png, image::ImageOutputFormat::Png)
+    .unwrap();
     Ok(encode(image_png))
 }
 
@@ -68,33 +63,33 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
     }
 }
 
-#[cfg(test)]
-mod tests {
-
-    extern crate test;
-    use super::*;
-    use crate::image_processing::matrices::Kernel;
-    use test::Bencher;
-
-    #[bench]
-    fn color_jpg(b: &mut Bencher) {
-        let image = Reader::open("tests/stickblind.jpg")
-            .unwrap()
-            .decode()
-            .unwrap();
-        b.iter(|| {
-            color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
-        });
-    }
-
-    #[bench]
-    fn color_png(b: &mut Bencher) {
-        let image = Reader::open("tests/stickblind.png")
-            .unwrap()
-            .decode()
-            .unwrap();
-        b.iter(|| {
-            color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
-        });
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//
+//     extern crate test;
+//     use super::*;
+//     use crate::image_processing::matrices::Kernel;
+//     use test::Bencher;
+//
+//     #[bench]
+//     fn color_jpg(b: &mut Bencher) {
+//         let image = Reader::open("tests/stickblind.jpg")
+//             .unwrap()
+//             .decode()
+//             .unwrap();
+//         b.iter(|| {
+//             color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
+//         });
+//     }
+//
+//     #[bench]
+//     fn color_png(b: &mut Bencher) {
+//         let image = Reader::open("tests/stickblind.png")
+//             .unwrap()
+//             .decode()
+//             .unwrap();
+//         b.iter(|| {
+//             color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
+//         });
+//     }
+// }

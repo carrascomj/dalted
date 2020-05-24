@@ -1,14 +1,9 @@
 use crate::image_processing::pipe_matrix_multiplication;
-use rocket::http::Status;
-use rocket::response::status;
-use rocket_contrib::json::Json;
-
-#[derive(Deserialize)]
-pub struct Image {
-    file_type: String,
-    image: String,
-    message: String,
-}
+use actix_web::{web, Error, HttpResponse};
+use base64::decode;
+use futures::StreamExt;
+use image::io::Reader;
+use std::io::Cursor;
 
 #[derive(Serialize)]
 pub struct Images {
@@ -18,14 +13,23 @@ pub struct Images {
 }
 
 /// Receive an image and respond with a vector of 5 transformed images
-#[post("/img_upload", data = "<image>")]
-pub fn upload(image: Json<Image>) -> Result<Json<Images>, status::Custom<String>> {
-    match pipe_matrix_multiplication(image.0.image) {
-        Ok(images) => Ok(Json(Images {
-            file_type: image.0.file_type,
-            images,
-            message: format!("Passed message: {}", image.0.message),
-        })),
-        Err(e) => Err(status::Custom(Status::NotAcceptable, format!("{:?}", e))),
+pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
+    // decode raw stream
+    let mut bytes = web::BytesMut::new();
+    while let Some(item) = stream.next().await {
+        bytes.extend_from_slice(&item?);
     }
+    // for some reason, base64 decoding fails for certain PNG images
+    let image = web::block(move || {
+        let reader = Reader::new(Cursor::new(decode(&bytes).unwrap())).with_guessed_format()?;
+        reader.decode()
+    })
+    .await?;
+    // backend logic here
+    let images = web::block(move || pipe_matrix_multiplication(&image)).await?;
+    Ok(HttpResponse::Ok().json(Images {
+        file_type: String::from("oklahoma"),
+        images,
+        message: String::from("good_morning"),
+    }))
 }

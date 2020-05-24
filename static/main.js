@@ -92,15 +92,7 @@ function loadDoc(target) {
           img6.alt = xhr.responseText;
         }
       };
-
-      xhr.send(
-        JSON.stringify({
-          file_type: file.type,
-          image: fr.result.slice(fr.result.indexOf("base64") + 7, -1),
-          // image: fr.result,
-          message: "Apples"
-        })
-      );
+      xhr.send(fr.result.slice(fr.result.indexOf("base64") + 7, -1));
     };
     fr.readAsDataURL(file);
   } else {
