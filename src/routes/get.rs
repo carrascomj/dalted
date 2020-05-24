@@ -1,5 +1,5 @@
-use actix_web::{get, HttpResponse, Result};
 use actix_web::http::StatusCode;
+use actix_web::{get, HttpResponse, Result};
 
 #[get("/")]
 pub async fn index() -> Result<HttpResponse> {

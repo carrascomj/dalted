@@ -13,9 +13,6 @@ use tera::Tera;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-    // std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info");
-    // env_logger::init();
-
     HttpServer::new(|| {
         let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
 
