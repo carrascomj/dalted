@@ -1,4 +1,4 @@
-![alt text](./static/img/logo_git.svg "Dalted logo black")  
+![alt text](./static/img/logo.svg "Dalted logo black")  
 ![MSRV](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
 
 # What is Dalted?
@@ -9,7 +9,7 @@ Web-app hosted at https://dalted.tech to simulate different types of color blind
 
 1. The color blindness simulation implementation was inspired by [Vienot et al., 1999](http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf).
 2. This simulation is explained in this [awesome post](https://ixora.io/projects/colorblindness/color-blindness-simulation-research/).
-3. Back-end written in [Rocket](https://rocket.rs/) Rust.
+3. Back-end written in [actix-web](https://actix.rs/).
 4. Backbone and guide for building a [Rust-Web-App](https://github.com/steadylearner/Rust-Web-App/).
 
 ## License

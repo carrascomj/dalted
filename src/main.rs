@@ -1,30 +1,31 @@
-#![feature(proc_macro_hygiene, decl_macro)]
-#![feature(test)]
-
-#[macro_use]
-extern crate rocket;
+extern crate actix_web;
 #[macro_use]
 extern crate serde_derive;
-
-extern crate tera;
-
+#[warn(unused_extern_crates)]
 mod image_processing;
 mod routes;
-use crate::routes::{errors, get, post, static_files};
+use crate::routes::{errors, get, post};
 
 // tera
-use rocket_contrib::templates::Template;
+use actix_files as fs;
+use actix_web::{web, App, HttpServer};
+use tera::Tera;
 
-fn rocket() -> rocket::Rocket {
-    rocket::ignite()
-        .attach(Template::fairing())
-        .mount(
-            "/",
-            routes![static_files::file, get::index, get::robots, post::upload],
-        )
-        .register(catchers![errors::not_found])
-}
+#[actix_rt::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
 
-fn main() {
-    rocket().launch();
+        App::new()
+            // .wrap(middleware::Logger::default())
+            .data(tera)
+            .service(fs::Files::new("/static", "./static/"))
+            .service(get::index)
+            .service(get::robots)
+            .service(web::resource("/img_upload").route(web::post().to(post::upload)))
+            .service(web::scope("").wrap(errors::error_handlers()))
+    })
+    .bind("127.0.0.1:8000")?
+    .run()
+    .await
 }

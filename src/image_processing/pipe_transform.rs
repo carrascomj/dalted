@@ -3,19 +3,26 @@ use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
-use std::error::Error;
 use std::io::Cursor;
 
+/// Decode incoming base64 image into a DynamicImage object, thread safe.
+/// For some reason, base64 decoding fails for certain PNG images
+pub fn decode_image(
+    bytes: &[u8],
+) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
+    let reader = Reader::new(Cursor::new(decode(&bytes)?)).with_guessed_format()?;
+    Ok(reader.decode()?)
+}
+
 /// Transform an image by applyng 5 matrix transformation that correspond to different types of
-/// color blidness.
+/// color blindness.
 /// The return type is a Result so that the errors can be communicated to the client.
 /// # References
 /// - Vietnol el al, 1999 http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf
 /// - Explanatory post https://ixora.io/projects/colorblindness/color-blindness-simulation-research/
-pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<dyn Error>> {
-    let reader = Reader::new(Cursor::new(decode(raw_data)?)).with_guessed_format()?;
-    let img = reader.decode()?;
-
+pub fn pipe_matrix_multiplication(
+    img: &DynamicImage,
+) -> Result<Vec<String>, Box<dyn std::error::Error + Send + Sync>> {
     let mut transformed: Vec<String> = vec![];
     for matrix in MATRICES.iter() {
         transformed.push(color_filter(&img, Kernel::<f32>::new(*matrix))?);
@@ -24,7 +31,10 @@ pub fn pipe_matrix_multiplication(raw_data: String) -> Result<Vec<String>, Box<d
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
-pub fn color_filter(img: &DynamicImage, matrix: Kernel<f32>) -> Result<String, Box<dyn Error>> {
+fn color_filter(
+    img: &DynamicImage,
+    matrix: Kernel<f32>,
+) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgba8(map_colors(img, |p| {
         if p[3] == 0 {
@@ -71,30 +81,25 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
 #[cfg(test)]
 mod tests {
 
-    extern crate test;
     use super::*;
     use crate::image_processing::matrices::Kernel;
-    use test::Bencher;
+    use image::io::Reader;
 
-    #[bench]
-    fn color_jpg(b: &mut Bencher) {
+    #[test]
+    fn color_jpg() {
         let image = Reader::open("tests/stickblind.jpg")
             .unwrap()
             .decode()
             .unwrap();
-        b.iter(|| {
-            color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
-        });
+        color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
     }
 
-    #[bench]
-    fn color_png(b: &mut Bencher) {
+    #[test]
+    fn color_png() {
         let image = Reader::open("tests/stickblind.png")
             .unwrap()
             .decode()
             .unwrap();
-        b.iter(|| {
-            color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
-        });
+        color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
     }
 }
