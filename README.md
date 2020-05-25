@@ -1,5 +1,5 @@
 ![alt text](./static/img/logo.svg "Dalted logo black")  
-![build](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
+![build](https://github.com/carrascomj/dalted/workflows/build/badge.svg?branch=master)
 
 # What is Dalted?
 
