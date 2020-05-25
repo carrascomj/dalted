@@ -1,9 +1,6 @@
-use crate::image_processing::pipe_matrix_multiplication;
+use crate::image_processing::{decode_image, pipe_matrix_multiplication};
 use actix_web::{web, Error, HttpResponse};
-use base64::decode;
 use futures::StreamExt;
-use image::io::Reader;
-use std::io::Cursor;
 
 #[derive(Serialize)]
 pub struct Images {
@@ -19,12 +16,7 @@ pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
     while let Some(item) = stream.next().await {
         bytes.extend_from_slice(&item?);
     }
-    // for some reason, base64 decoding fails for certain PNG images
-    let image = web::block(move || {
-        let reader = Reader::new(Cursor::new(decode(&bytes).unwrap())).with_guessed_format()?;
-        reader.decode()
-    })
-    .await?;
+    let image = web::block(move || decode_image(&bytes.freeze())).await?;
     // backend logic here
     let images = web::block(move || pipe_matrix_multiplication(&image)).await?;
     Ok(HttpResponse::Ok().json(Images {
