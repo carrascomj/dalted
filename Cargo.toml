@@ -1,5 +1,5 @@
 [package]
-name = "dalted-actix"
+name = "dalted"
 version = "0.1.0"
 authors = ["carrascomj <carrascomurielj@gmail.com>"]
 edition = "2018"
