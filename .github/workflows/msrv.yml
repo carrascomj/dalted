@@ -20,7 +20,7 @@ on:
       - "**.md"
       - "**.txt"
 
-name: MSRV
+name: build
 
 jobs:
   check:

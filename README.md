@@ -1,5 +1,5 @@
 ![alt text](./static/img/logo.svg "Dalted logo black")  
-![MSRV](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
+![build](https://github.com/carrascomj/dalted/workflows/MSRV/badge.svg?branch=master)
 
 # What is Dalted?
 
@@ -29,18 +29,17 @@ additional terms or conditions.
 
 ## Run locally
 
-The backend runs on Rust nightly ([Rocket](https://rocket.rs/)). Thus, the first step is to [install
-Rust](https://www.rust-lang.org/tools/install):
+The first step is to [install Rust](https://www.rust-lang.org/tools/install):
 
 ```bash
 # Unix-like OS
 curl https://sh.rustup.rs -sSf | sh
-rustup toolchain install nightly
 ```
 
-After that, it can be run in the browser with [cargo](https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html):
+After cloning this repository, it can be run in the browser with [cargo](https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html):
 
 ```bash
+git clone https://github.com/carrascomj/dalted.git
 # enable --release for optimized compilation (but slower build process)
-cargo run +nightly #  --release
+cargo run #--release
 ```
