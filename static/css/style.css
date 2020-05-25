@@ -7,8 +7,8 @@ body {
   font-size: 28px;
   margin: 0;
   padding: 0;
-  color: #0e1111;
-  background-color: #353335;
+  color: #353335;
+  background-color: white;
 }
 
 .cont-grid {
@@ -21,7 +21,7 @@ body {
 .cont-grid-about {
   /* Main schema of page */
   display: grid;
-  color: #e0e2cc;
+  color: #353335;
   grid-template-rows: 0.5fr 5.3fr;
   grid-gap: 1em;
 }
@@ -31,7 +31,7 @@ body {
   padding-right: 3em;
   padding-left: 3em;
   padding-top: 0.5em;
-  /* background-color: #0e1111; */
+  /* background-color: #353335; */
   opacity: 1;
   display: grid;
   grid-template-columns: 0.65fr 0.35fr;
@@ -66,15 +66,17 @@ a:hover {
   justify-content: center;
   /* display: inline-block; */
   /* border-radius: 6px; */
-  color: #e0e2cc;
-  background-color: #3b7682;
-  border: solid 1px #e0e2cc;
+  /* color: #e0e2cc; */
+  color: #353335;
+  background-color: white;
+  border: solid 1px #353335;
 }
 
 .user-sweep:hover {
   /* color: #3b444b; */
   /* border: solid 6px; */
-  border: solid 3px;
+  font-size: 29px;
+  border: solid 4px #353335;
 }
 
 .upload-btn-wrapper {
@@ -92,15 +94,15 @@ a:hover {
 }
 
 .pressable {
-  color: #e0e2cc;
-  border: solid 1px #e0e2cc;
+  color: #353335;
+  border: solid 1px #353335;
   /* border-radius: 6px; */
   padding: 3px;
   cursor: pointer;
 }
 
 .go {
-  border: solid 1px #0e1111;
+  border: solid 1px #353335;
   /* border-radius: 6px; */
   padding: 3px;
   cursor: pointer;
@@ -182,8 +184,8 @@ a:hover {
 
 .flex-img {
   width: 60%;
-  border: solid 1px #0e1111;
-  background-color: #e0e2cc;
+  border: solid 1px #353335;
+  /* background-color: #e0e2cc; */
   display: block;
   margin-left: auto;
   margin-right: auto;
