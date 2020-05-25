@@ -1,6 +1,8 @@
 use crate::image_processing::{decode_image, pipe_matrix_multiplication};
-use actix_web::{web, Error, HttpResponse};
+use actix_web::{error, web, Error, HttpResponse};
 use futures::StreamExt;
+
+const MAX_SIZE: usize = 3_145_728;
 
 #[derive(Serialize)]
 pub struct Images {
@@ -13,8 +15,14 @@ pub struct Images {
 pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
     // decode raw stream
     let mut bytes = web::BytesMut::new();
-    while let Some(item) = stream.next().await {
-        bytes.extend_from_slice(&item?);
+    while let Some(chunk) = stream.next().await {
+        let chunk = chunk?;
+
+        if (bytes.len() + chunk.len()) > MAX_SIZE {
+            return Err(error::ErrorBadRequest("Image was too big!"));
+        }
+
+        bytes.extend_from_slice(&chunk);
     }
     let image = web::block(move || decode_image(&bytes.freeze())).await?;
     // backend logic here
