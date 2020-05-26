@@ -28,8 +28,8 @@ pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
     // backend logic here
     let images = web::block(move || pipe_matrix_multiplication(&image)).await?;
     Ok(HttpResponse::Ok().json(Images {
-        file_type: String::from("oklahoma"),
+        file_type: String::from("image/png"),
         images,
-        message: String::from("good_morning"),
+        message: String::from("OK!"),
     }))
 }

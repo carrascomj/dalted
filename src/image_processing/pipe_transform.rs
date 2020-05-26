@@ -5,7 +5,7 @@ use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
 use std::io::Cursor;
 
-/// Decode incoming base64 image into a DynamicImage object, thread safe.
+/// Decode incoming raw bytes image into a DynamicImage object, thread safe.
 /// For some reason, base64 decoding fails for certain PNG images
 fn _decode_image(
     bytes: &[u8],
@@ -14,6 +14,8 @@ fn _decode_image(
     Ok(reader.decode()?)
 }
 
+/// Decode incoming raw bytes image into a DynamicImage object, thread safe.
+/// It works for all format supported by `image`.
 pub fn decode_raw_image(
     bytes: &[u8],
 ) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
