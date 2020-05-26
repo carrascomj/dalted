@@ -21,26 +21,42 @@ body {
 .cont-grid-about {
   /* Main schema of page */
   display: grid;
+  padding: 2em;
   color: #353335;
   grid-template-rows: 0.5fr 5.3fr;
   grid-gap: 1em;
 }
 
+
 .nav-title {
   grid-column: 1 / 5;
-  padding-right: 3em;
-  padding-left: 3em;
-  padding-top: 0.5em;
+  margin-top: 0.5em;
+  padding-left: 1em;
+  padding-right: 0em;
   /* background-color: #353335; */
   opacity: 1;
   display: grid;
-  grid-template-columns: 0.65fr 0.35fr;
-  grid-template-areas: "title about";
+  grid-template-columns: 0.3fr 0.4fr 0.2fr;
+  grid-template-areas: "expl title about";
 }
 
+
+.explanation {
+  /* margin-left: 12em; */
+  color: #353335;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 14px;
+  grid-area: "expl";
+}
+
+.gh {
+  width: 30%;
+}
 .main {
   color: white;
-  justify-self: end;
+  width: 100%;
   align-self: center;
   grid-area: "title";
 }
@@ -59,8 +75,12 @@ a:hover {
   grid-area: "about";
 }
 
+.exp-text {
+  width: 90%;
+}
+
 .user-sweep {
-  grid-column: 2 / 3;
+  grid-column: 2 / 4;
   margin-top: 1em;
   display: flex;
   justify-content: center;
@@ -75,7 +95,7 @@ a:hover {
 .user-sweep:hover {
   /* color: #3b444b; */
   /* border: solid 6px; */
-  font-size: 29px;
+  font-weight: bold;
   border: solid 4px #353335;
 }
 
@@ -173,6 +193,27 @@ a:hover {
 
 /* Computers */
 @media screen and (min-device-width: 900px) {
+  .nav-title {
+    grid-column: 1 / 5;
+    margin-top: 0.5em;
+    padding-left: 1em;
+    padding-right: 3em;
+    /* background-color: #353335; */
+    opacity: 1;
+    display: grid;
+    grid-template-columns: 0.4fr 1fr 0.65fr;
+    grid-template-areas: "expl title about";
+  }
+  .main {
+    width: 65%;
+    justify-self: end;
+  }
+  .explanation {
+    font-size: 22px;
+  }
+  .gh {
+    width: 60%;
+  }
   .flex-pic {
     /* flex: 1; */
     flex-basis: 33%;
@@ -180,6 +221,14 @@ a:hover {
   .cont-grid {
     /* Main schema of page */
     grid-template-columns: 2fr 0.9fr 2fr;
+  }
+  .user-sweep {
+    grid-column: 2 / 3;
+  }
+  .cont-grid-about {
+    /* Main schema of page */
+    padding: 0em;
+    margin-right: 0em;
   }
 }
 
