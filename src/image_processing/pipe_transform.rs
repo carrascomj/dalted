@@ -73,6 +73,8 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
     // treat overflow of "very white" colors
     if res > 255.0 {
         255.0
+    } else if res < 0.0 {
+        0.0
     } else {
         res
     }
