@@ -7,11 +7,17 @@ use std::io::Cursor;
 
 /// Decode incoming base64 image into a DynamicImage object, thread safe.
 /// For some reason, base64 decoding fails for certain PNG images
-pub fn decode_image(
+fn _decode_image(
     bytes: &[u8],
 ) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
     let reader = Reader::new(Cursor::new(decode(&bytes)?)).with_guessed_format()?;
     Ok(reader.decode()?)
+}
+
+pub fn decode_raw_image(
+    bytes: &[u8],
+) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
+    Ok(image::load_from_memory(bytes)?)
 }
 
 /// Transform an image by applyng 5 matrix transformation that correspond to different types of

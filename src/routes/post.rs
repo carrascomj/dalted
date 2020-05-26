@@ -1,4 +1,4 @@
-use crate::image_processing::{decode_image, pipe_matrix_multiplication};
+use crate::image_processing::{decode_raw_image, pipe_matrix_multiplication};
 use actix_web::{error, web, Error, HttpResponse};
 use futures::StreamExt;
 
@@ -24,7 +24,7 @@ pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
 
         bytes.extend_from_slice(&chunk);
     }
-    let image = web::block(move || decode_image(&bytes.freeze())).await?;
+    let image = web::block(move || decode_raw_image(&bytes.freeze())).await?;
     // backend logic here
     let images = web::block(move || pipe_matrix_multiplication(&image)).await?;
     Ok(HttpResponse::Ok().json(Images {

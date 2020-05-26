@@ -63,38 +63,38 @@ function loadDoc(target) {
     fill_pics("Transforming...");
 
     var fr = new FileReader();
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/img_upload");
+    xhr.onload = function(e) {
+      //The response of the upload
+      xhr.responseText;
+      if (xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText);
+        // sometimes "original" is not generated for jpg
+        img1.alt = "original";
+        img2.src = "data:image/png;base64," + data.images[0];
+        img3.src = "data:image/png;base64," + data.images[1];
+        img4.src = "data:image/png;base64," + data.images[2];
+        img5.src = "data:image/png;base64," + data.images[3];
+        img6.src = "data:image/png;base64," + data.images[4];
+      } else {
+        fill_pics("Is image too large?");
+        img4.alt = "Image could not be parsed";
+        img5.alt = "Error message ->";
+        img6.alt = xhr.responseText;
+      }
+    };
     fr.onloadend = function() {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/img_upload");
-      xhr.onload = function(e) {
-        //The response of the upload
-        xhr.responseText;
-        if (xhr.status === 200) {
-          var data = JSON.parse(xhr.responseText);
-          let original = fr.result;
-          if (file.type === "image/jpg") {
-            original =
-              "data:image/jpg;base64," +
-              original.slice(original.indexOf("base64") + 7, -1);
-          }
-          // sometimes "normal" is not generated for jpg
-          img1.alt = "normal";
-          img1.src = original;
-          img2.src = "data:image/png;base64," + data.images[0];
-          img3.src = "data:image/png;base64," + data.images[1];
-          img4.src = "data:image/png;base64," + data.images[2];
-          img5.src = "data:image/png;base64," + data.images[3];
-          img6.src = "data:image/png;base64," + data.images[4];
-        } else {
-          fill_pics("Is image too large?");
-          img4.alt = "Image could not be parsed";
-          img5.alt = "Error message ->";
-          img6.alt = xhr.responseText;
-        }
-      };
-      xhr.send(fr.result.slice(fr.result.indexOf("base64") + 7, -1));
+      let original = fr.result;
+      if (file.type === "image/jpg") {
+        original =
+          "data:image/jpg;base64," +
+          original.slice(original.indexOf("base64") + 7, -1);
+      }
+      img1.src = original;
     };
     fr.readAsDataURL(file);
+    xhr.send(file);
   } else {
     fill_pics("Supported: PNG, JPG, JPEG");
 
