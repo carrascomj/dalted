@@ -80,7 +80,9 @@ a:hover {
 }
 
 .user-sweep {
-  grid-column: 2 / 4;
+  margin-left: 1em;
+  margin-right: 1em;
+  grid-column: 1 / 5;
   margin-top: 1em;
   display: flex;
   justify-content: center;
@@ -189,6 +191,26 @@ a:hover {
     /* Main schema of page */
     grid-template-columns: 2fr 2fr;
   }
+  .cont-grid-about {
+    /* Main schema of page */
+    padding: 0em;
+    margin-right: 0em;
+  }
+  .user-sweep {
+    margin-left: 0em;
+    margin-right: 0em;
+    grid-column: 2 / 3;
+  }
+  .main {
+    width: 65%;
+    justify-self: end;
+  }
+  .explanation {
+    font-size: 22px;
+  }
+  .gh {
+    width: 60%;
+  }
 }
 
 /* Computers */
@@ -204,16 +226,6 @@ a:hover {
     grid-template-columns: 0.4fr 1fr 0.65fr;
     grid-template-areas: "expl title about";
   }
-  .main {
-    width: 65%;
-    justify-self: end;
-  }
-  .explanation {
-    font-size: 22px;
-  }
-  .gh {
-    width: 60%;
-  }
   .flex-pic {
     /* flex: 1; */
     flex-basis: 33%;
@@ -221,14 +233,6 @@ a:hover {
   .cont-grid {
     /* Main schema of page */
     grid-template-columns: 2fr 0.9fr 2fr;
-  }
-  .user-sweep {
-    grid-column: 2 / 3;
-  }
-  .cont-grid-about {
-    /* Main schema of page */
-    padding: 0em;
-    margin-right: 0em;
   }
 }
 
