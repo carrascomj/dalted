@@ -1,6 +1,7 @@
 use std::ops::{Add, Mul};
 
 type Mat3x3 = [f32; 9];
+type Vec3x3 = [f32; 3];
 const PRONATOPIA: Mat3x3 = [
     0.17056, 0.82944, -0.0, 0.17056, 0.82944, 0.0, -0.00452, 0.00452, 1.0,
 ];
@@ -12,25 +13,21 @@ const TRINATOPIA: Mat3x3 = [
     1.0, 0.1274, -0.1274, -0.0, 0.87391, 0.12609, 0.0, 0.87391, 0.12609,
 ];
 
-const BLUE_CONE_ACHROMATOPSIA: Mat3x3 = [
-    0.01775, 0.10945, 0.87262, 0.01775, 0.10945, 0.87262, 0.01775, 0.10945, 0.87262,
-];
+const BLUE_CONE_ACHROMATOPSIA: Vec3x3 = [0.01775, 0.10945, 0.87262];
 
-const ACHROMATOPSIA: Mat3x3 = [
-    0.212_656, 0.715_158, 0.072_186, 0.212_656, 0.715_158, 0.072_186, 0.212_656, 0.715_158,
-    0.072_186,
-];
+const ACHROMATOPSIA: Vec3x3 = [0.212_656, 0.715_158, 0.072_186];
 
 /// Matrices to be applied to a linear RGB vector to simulate color blindness.
 /// Each matrix `M` is $M = T  S T^{-1}$ where T is the linear transformation from
 /// linear RGB (0,1) to LMS and S is the color blindness filter.
-pub const MATRICES: [Mat3x3; 5] = [
-    PRONATOPIA,
-    DEUTERANOPIA,
-    TRINATOPIA,
-    BLUE_CONE_ACHROMATOPSIA,
-    ACHROMATOPSIA,
-];
+pub const MATRICES: [Mat3x3; 3] = [PRONATOPIA, DEUTERANOPIA, TRINATOPIA];
+
+/// Vectors to be applied to a linear RGB vector to simulate color blindness.
+/// Since they perform a gray scale conversion, they produce 1 point (broadcasted to three for
+/// consistency).
+/// Each vector `M` is $M = T  S T^{-1}$ where T is the linear transformation from
+/// linear RGB (0,1) to LMS and S is the color blindness filter.
+pub const VECTORS: [Vec3x3; 2] = [BLUE_CONE_ACHROMATOPSIA, ACHROMATOPSIA];
 
 /// Kernel is a (stacked) square 3x3 matrix. Simple interface to apply color filters.
 /// K is used by pipe_transform as an f32
@@ -131,7 +128,8 @@ impl<T: Copy + Mul<T, Output = T> + Add<T, Output = T>> Matops3<T> for Kernel<T>
 impl<T: Copy + Mul<T, Output = T> + Add<T, Output = T>> Matops3<T> for Vec3<T> {
     fn vecmul(&self, vector: Vec3<T>) -> Vec3<T> {
         let [r, g, b] = vector.cont;
-        Vec3::new([self.cont[0] * r, self.cont[1] * g, self.cont[2] * b])
+        let gray = self.cont[0] * r + self.cont[1] * g + self.cont[2] * b;
+        Vec3::new([gray, gray, gray])
     }
     fn apply(&self, f: impl Fn(T) -> T) -> Self {
         Vec3::new([f(self.cont[0]), f(self.cont[1]), f(self.cont[2])])

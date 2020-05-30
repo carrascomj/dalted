@@ -1,4 +1,4 @@
-use super::matrices::{Kernel, Matops3, Vec3, MATRICES};
+use super::matrices::{Kernel, Matops3, Vec3, MATRICES, VECTORS};
 use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgba};
@@ -35,13 +35,16 @@ pub fn pipe_matrix_multiplication(
     for matrix in MATRICES.iter() {
         transformed.push(color_filter(&img, Kernel::<f32>::new(*matrix))?);
     }
+    for vec in VECTORS.iter() {
+        transformed.push(color_filter(&img, Vec3::<f32>::new(*vec))?);
+    }
     Ok(transformed)
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
-fn color_filter(
+fn color_filter<T: Matops3<f32>>(
     img: &DynamicImage,
-    matrix: Kernel<f32>,
+    matrix: T,
 ) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgba8(map_colors(img, |p| {
