@@ -154,7 +154,7 @@ mod tests {
     fn hadamart_product() {
         let ex_k = Vec3::new([1u8, 2, 3]);
         let ex_s = Vec3::new([9u8, 2, 3]);
-        assert_eq!(Vec3::new([9, 4, 9]).cont, (ex_k.vecmul(ex_s)).cont);
+        assert_eq!(Vec3::new([22, 22, 22]).cont, (ex_k.vecmul(ex_s)).cont);
     }
 
     #[test]
