@@ -8,21 +8,21 @@ var img5 = document.getElementById("img5");
 var img6 = document.getElementById("img6");
 
 // CLICK SUBMIT
-target_brows.addEventListener("change", function(event) {
+target_brows.addEventListener("change", function (event) {
   event.preventDefault();
   loadDoc(target_brows);
 });
 
 // DRAG AND DROP
-document.body.addEventListener("dragover", function(event) {
+document.body.addEventListener("dragover", function (event) {
   event.preventDefault();
 });
-document.body.addEventListener("drop", function(event) {
+document.body.addEventListener("drop", function (event) {
   event.preventDefault();
 });
 target_drag.addEventListener(
   "dragover",
-  function(event) {
+  function (event) {
     // prevent default on box and change color
     event.preventDefault();
     target_drag.style.backgroundColor = "#3bb477";
@@ -31,7 +31,7 @@ target_drag.addEventListener(
 );
 target_drag.addEventListener(
   "drop",
-  function(event) {
+  function (event) {
     // cancel default actions
     event.preventDefault();
     // restore default when drop
@@ -42,7 +42,14 @@ target_drag.addEventListener(
 );
 
 // check type
-var fileTypes = ["image/jpeg", "image/jpg", "image/png"];
+var fileTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/tiff",
+  "image/gif",
+  "image/x-portable-anymap",
+];
 
 function validFileType(file) {
   for (var i = 0; i < fileTypes.length; i++) {
@@ -65,7 +72,7 @@ function loadDoc(target) {
     var fr = new FileReader();
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/img_upload");
-    xhr.onload = function(e) {
+    xhr.onload = function (e) {
       //The response of the upload
       xhr.responseText;
       if (xhr.status === 200) {
@@ -84,8 +91,9 @@ function loadDoc(target) {
         img6.alt = xhr.responseText;
       }
     };
-    fr.onloadend = function() {
+    fr.onloadend = function () {
       let original = fr.result;
+      console.log(original);
       if (file.type === "image/jpg") {
         original =
           "data:image/jpg;base64," +
