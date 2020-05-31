@@ -93,7 +93,6 @@ function loadDoc(target) {
     };
     fr.onloadend = function () {
       let original = fr.result;
-      console.log(original);
       if (file.type === "image/jpg") {
         original =
           "data:image/jpg;base64," +
