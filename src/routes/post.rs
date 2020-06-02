@@ -33,3 +33,23 @@ pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
         message: String::from("OK!"),
     }))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use image::io::Reader;
+
+    #[test]
+    fn test_post() {
+        let image = Reader::open("tests/stickblind.jpg")
+            .unwrap()
+            .decode()
+            .unwrap();
+        let images = pipe_matrix_multiplication(&image).unwrap();
+        Images {
+            file_type: String::from("image/png"),
+            images: images.clone(),
+            message: String::from("OK!"),
+        };
+    }
+}
