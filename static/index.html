@@ -18,7 +18,9 @@
     <title>Dalted - Color blindness spectrum 👁</title>
   </head>
   <body>
+    <!-- cont-grid is a grid with 3 rows: nav, user-sweep and images -->
     <div class="cont-grid">
+      <!-- 1st row: navigation bar -->
       <nav class="nav-title">
         <div class="explanation">
           <a class="flex-pic" href="https://github.com/carrascomj/dalted">
@@ -27,12 +29,14 @@
             </picture>
           </a>
           <p class="exp-text">
-            Rapid color blindness simulation <br/> (Size of images is restricted)
+            Rapid color blindness simulation <br />
+            Is your image color-friendly?
           </p>
         </div>
         <img src="/static/img/logo.svg" class="main" />
         <p class="about"><a href="/static/about.html">About</a></p>
       </nav>
+      <!-- 2nd row: button with drag and drop -->
       <div class="user-sweep" id="box">
         <div class="upload-btn-wrapper">
           <p class="drag-text">
@@ -45,12 +49,23 @@
           <input type="file" name="fileb" id="fileb" />
         </div>
       </div>
+      <!-- 3rd row: 6 images, as a flex box -->
       <div class="portrait">
         <picture class="flex-pic"
-          ><img src="/static/img/orig.svg" alt="normal" class="flex-img" id="img1" />
+          ><img
+            src="/static/img/orig.svg"
+            alt="normal"
+            class="flex-img"
+            id="img1"
+          />
         </picture>
         <picture class="flex-pic"
-          ><img src="/static/img/pronat.svg" alt="pronatopia" class="flex-img" id="img2" /> </picture
+          ><img
+            src="/static/img/pronat.svg"
+            alt="pronatopia"
+            class="flex-img"
+            id="img2"
+          /> </picture
         ><picture class="flex-pic"
           ><img
             src="/static/img/deut.svg"
@@ -59,7 +74,12 @@
             id="img3"
           /> </picture
         ><picture class="flex-pic"
-          ><img src="/static/img/trin.svg" alt="trinatopia" class="flex-img" id="img4" /> </picture
+          ><img
+            src="/static/img/trin.svg"
+            alt="trinatopia"
+            class="flex-img"
+            id="img4"
+          /> </picture
         ><picture class="flex-pic"
           ><img
             src="/static/img/blueac.svg"
@@ -68,7 +88,12 @@
             id="img5"
           /> </picture
         ><picture class="flex-pic"
-          ><img src="/static/img/achr.svg" alt="red achromatopsia" class="flex-img" id="img6" />
+          ><img
+            src="/static/img/achr.svg"
+            alt="red achromatopsia"
+            class="flex-img"
+            id="img6"
+          />
         </picture>
       </div>
     </div>

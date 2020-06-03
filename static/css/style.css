@@ -162,7 +162,6 @@ a:hover {
   width: 100%;
 }
 
-/* TODO: Find also responsive showcase images */
 /* Mobiles */
 .flex-pic {
   flex: 1 1 100%;
@@ -188,11 +187,9 @@ a:hover {
     flex: 0 50%;
   }
   .cont-grid {
-    /* Main schema of page */
     grid-template-columns: 2fr 2fr;
   }
   .cont-grid-about {
-    /* Main schema of page */
     padding: 0em;
     margin-right: 0em;
   }
@@ -220,11 +217,7 @@ a:hover {
     margin-top: 0.5em;
     padding-left: 1em;
     padding-right: 3em;
-    /* background-color: #353335; */
-    opacity: 1;
-    display: grid;
     grid-template-columns: 0.4fr 1fr 0.65fr;
-    grid-template-areas: "expl title about";
   }
   .flex-pic {
     /* flex: 1; */
