@@ -3,6 +3,7 @@ use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
+use rayon::prelude::*;
 use std::io::Cursor;
 
 /// Decode incoming raw bytes image into a DynamicImage object, thread safe.
@@ -31,14 +32,24 @@ pub fn decode_raw_image(
 pub fn pipe_matrix_multiplication(
     img: &DynamicImage,
 ) -> Result<Vec<String>, Box<dyn std::error::Error + Send + Sync>> {
-    let mut transformed: Vec<String> = vec![];
-    for matrix in MATRICES.iter() {
-        transformed.push(color_filter(&img, Kernel::<f32>::new(*matrix))?);
-    }
-    for vec in VECTORS.iter() {
-        transformed.push(color_filter(&img, Vec3::<f32>::new(*vec))?);
-    }
-    Ok(transformed)
+    let mut transformed = rayon::join(
+        || {
+            MATRICES
+                .par_iter()
+                .map(|mat| color_filter(&img, Kernel::<f32>::new(*mat)).expect("works"))
+                .collect::<Vec<String>>()
+        },
+        || {
+            VECTORS
+                .par_iter()
+                .map(|mat| color_filter(&img, Vec3::<f32>::new(*mat)).expect("works"))
+                .collect::<Vec<String>>()
+        },
+    );
+
+    transformed.0.extend(transformed.1);
+
+    Ok(transformed.0)
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
