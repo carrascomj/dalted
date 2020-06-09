@@ -45,7 +45,7 @@ fn not_found<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
 }
 
 // Error handler for a 418 Page i'm a teapot.
-pub fn im_a_teapot<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
+fn im_a_teapot<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
     let response = get_error_response(&res, Wreck::On418);
     Ok(ErrorHandlerResponse::Response(
         res.into_response(response.into_body()),
