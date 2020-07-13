@@ -86,19 +86,15 @@ fn remove_gamma(rgb_a: f32) -> f32 {
 
 /// Transform linear RGB [0, 1] back to RGB in [0, 255]
 fn gamma_correction(rgb_linear: f32) -> f32 {
-    let res;
-    if rgb_linear > 0.003_130_8 {
-        res = 269.025 * rgb_linear.powf(0.41666) - 14.025
-    } else {
-        res = 3294.6 * rgb_linear
-    }
-    // treat overflow of "very white" colors
-    if res > 255.0 {
+    // first, treat overflow out of the linear range
+    if rgb_linear >= 1.0 {
         255.0
-    } else if res < 0.0 {
+    } else if rgb_linear <= 0.0 {
         0.0
+    } else if rgb_linear > 0.003_130_8 {
+        269.025 * rgb_linear.powf(0.41666) - 14.025
     } else {
-        res
+        3294.6 * rgb_linear
     }
 }
 
