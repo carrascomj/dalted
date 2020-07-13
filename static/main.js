@@ -48,6 +48,7 @@ var fileTypes = [
   "image/png",
   "image/tiff",
   "image/gif",
+  "image/bmp",
   "image/x-portable-anymap",
 ];
 
