@@ -11,7 +11,7 @@ use actix_files as fs;
 use actix_web::{web, App, HttpServer};
 use tera::Tera;
 
-#[actix_rt::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
