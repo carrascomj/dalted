@@ -23,7 +23,7 @@ pub fn decode_raw_image(
     Ok(image::load_from_memory(bytes)?)
 }
 
-/// Transform an image by applyng 5 matrix transformation that correspond to different types of
+/// Transform an image by applying 5 matrix transformation that correspond to different types of
 /// color blindness.
 /// The return type is a Result so that the errors can be communicated to the client.
 /// # References
@@ -53,6 +53,12 @@ pub fn pipe_matrix_multiplication(
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
+///
+/// Here, `T` is a Vector of length 3 or a Matrix of dimension 3x3, which implement this custom
+/// trait with the functions to do linear tranformations over the colors and apply functions to
+/// them.
+/// This was implemented as a learning experience, but, for larger applications, I would rely on
+/// crates like [nalgebra](https://www.nalgebra.org/) to handle this functionality.
 fn color_filter<T: Matops3<f32>>(
     img: &DynamicImage,
     matrix: T,
@@ -60,7 +66,7 @@ fn color_filter<T: Matops3<f32>>(
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgba8(map_colors(img, |p| {
         if p[3] == 0 {
-            // transformation is meaningless when opacity is 100%
+            // transformation is meaningless when opacity is 0
             p
         } else {
             let v = matrix
