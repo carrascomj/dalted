@@ -159,19 +159,19 @@ mod tests {
 
     #[test]
     fn dot_product_kernel_x_vec() {
-        let ex_k = Kernel::new([1f32, 2., 3., 4., 5., 6., 7., 8., 9.]);
+        let ex_k = Kernel::new([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         assert_eq!(
-            Vec3::new([36., 84., 132.]).cont,
-            ex_k.vecmul(Vec3::new([5., 2., 9.])).cont
+            Vec3::new([36, 84, 132]).cont,
+            ex_k.vecmul(Vec3::new([5, 2, 9])).cont
         );
     }
 
     #[test]
     fn apply_mul() {
-        let ex_k = Kernel::new([1., 2., 3., 4., 5., 6., 7., 8., 9.]);
+        let ex_k = Kernel::new([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         assert_eq!(
-            Kernel::new([5., 10., 15., 20.0, 25.0, 30.0, 35.0, 40.0, 45.0]).matrix,
-            ex_k.apply(|x| x * 5.).matrix
+            Kernel::new([5, 10, 15, 20, 25, 30, 35, 40, 45]).matrix,
+            ex_k.apply(|x| x * 5).matrix
         );
     }
 }

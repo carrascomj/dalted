@@ -38,6 +38,7 @@ pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
 mod tests {
     use super::*;
     use image::io::Reader;
+    use actix_web::HttpResponse;
 
     #[test]
     fn test_post() {
@@ -46,10 +47,10 @@ mod tests {
             .decode()
             .unwrap();
         let images = pipe_matrix_multiplication(&image).unwrap();
-        Images {
+        HttpResponse::Ok().json(Images {
             file_type: String::from("image/png"),
-            images: images.clone(),
+            images,
             message: String::from("OK!"),
-        };
+        });
     }
 }
