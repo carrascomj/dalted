@@ -37,8 +37,8 @@ pub async fn upload(mut stream: web::Payload) -> Result<HttpResponse, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use image::io::Reader;
     use actix_web::HttpResponse;
+    use image::io::Reader;
 
     #[test]
     fn test_post() {
