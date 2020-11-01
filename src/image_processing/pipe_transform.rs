@@ -1,10 +1,12 @@
-use super::matrices::{Kernel, Matops3, Vec3, MATRICES, VECTORS};
+use super::matrices::MATRICES;
 use base64::{decode, encode};
 use image::io::Reader;
 use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
 use rayon::prelude::*;
 use std::io::Cursor;
+use std::ops::Mul;
+use ultraviolet::{Mat3, Vec3};
 
 /// Decode incoming raw bytes image into a DynamicImage object, thread safe.
 /// For some reason, base64 decoding fails for certain PNG images
@@ -32,24 +34,10 @@ pub fn decode_raw_image(
 pub fn pipe_matrix_multiplication(
     img: &DynamicImage,
 ) -> Result<Vec<String>, Box<dyn std::error::Error + Send + Sync>> {
-    let mut transformed = rayon::join(
-        || {
-            MATRICES
-                .par_iter()
-                .map(|mat| color_filter(&img, Kernel::<f32>::new(*mat)).expect("works"))
-                .collect::<Vec<String>>()
-        },
-        || {
-            VECTORS
-                .par_iter()
-                .map(|mat| color_filter(&img, Vec3::<f32>::new(*mat)).expect("works"))
-                .collect::<Vec<String>>()
-        },
-    );
-
-    transformed.0.extend(transformed.1);
-
-    Ok(transformed.0)
+    Ok(MATRICES
+        .par_iter()
+        .map(|mat| color_filter(&img, Mat3::from(*mat)).expect("works"))
+        .collect::<Vec<String>>())
 }
 
 /// Tranform RGB values in linear space [0, 1] with a matrix and return normal RGB values [0, 255]
@@ -57,22 +45,21 @@ pub fn pipe_matrix_multiplication(
 /// Here, `T` is a Vector of length 3 or a Matrix of dimension 3x3, which implement this custom
 /// trait with the functions to do linear tranformations over the colors and apply functions to
 /// them.
-/// This was implemented as a learning experience, but, for larger applications, I would rely on
-/// crates like [nalgebra](https://www.nalgebra.org/) to handle this functionality.
-fn color_filter<T: Matops3<f32>>(
+fn color_filter<T>(
     img: &DynamicImage,
     matrix: T,
-) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<String, Box<dyn std::error::Error + Send + Sync>>
+where
+    T: Mul<Vec3, Output = Vec3> + Copy,
+{
     let mut image_png = Vec::<u8>::new();
     DynamicImage::ImageRgba8(map_colors(img, |p| {
         if p[3] == 0 {
             // transformation is meaningless when opacity is 0
             p
         } else {
-            let v = matrix
-                .vecmul(Vec3::<f32>::from(p.0).apply(remove_gamma))
-                .apply(gamma_correction)
-                .cont();
+            let pix = [p.0[0] as f32, p.0[1] as f32, p.0[2] as f32];
+            let v = (matrix * Vec3::from(pix).map(remove_gamma)).map(gamma_correction);
             Rgba([v[0] as u8, v[1] as u8, v[2] as u8, p[3]])
         }
     }))
@@ -108,7 +95,7 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
 mod tests {
 
     use super::*;
-    use crate::image_processing::matrices::Kernel;
+    use ultraviolet::Mat3;
     use image::io::Reader;
 
     #[test]
@@ -117,7 +104,7 @@ mod tests {
             .unwrap()
             .decode()
             .unwrap();
-        color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
+        color_filter(&image, Mat3::from(MATRICES[0])).unwrap();
     }
 
     #[test]
@@ -126,6 +113,6 @@ mod tests {
             .unwrap()
             .decode()
             .unwrap();
-        color_filter(&image, Kernel::<f32>::new(MATRICES[0])).unwrap();
+        color_filter(&image, Mat3::from(MATRICES[0])).unwrap();
     }
 }
