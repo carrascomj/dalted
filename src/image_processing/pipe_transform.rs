@@ -1,21 +1,10 @@
 use super::matrices::MATRICES;
-use base64::{decode, encode};
-use image::io::Reader;
+use base64::encode;
 use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
 use rayon::prelude::*;
-use std::io::Cursor;
 use std::ops::Mul;
 use ultraviolet::{Mat3, Vec3};
-
-/// Decode incoming raw bytes image into a DynamicImage object, thread safe.
-/// For some reason, base64 decoding fails for certain PNG images
-fn _decode_image(
-    bytes: &[u8],
-) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
-    let reader = Reader::new(Cursor::new(decode(&bytes)?)).with_guessed_format()?;
-    Ok(reader.decode()?)
-}
 
 /// Decode incoming raw bytes image into a DynamicImage object, thread safe.
 /// It works for all format supported by `image`.
