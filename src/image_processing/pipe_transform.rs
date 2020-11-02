@@ -84,8 +84,8 @@ fn gamma_correction(rgb_linear: f32) -> f32 {
 mod tests {
 
     use super::*;
-    use ultraviolet::Mat3;
     use image::io::Reader;
+    use ultraviolet::Mat3;
 
     #[test]
     fn color_jpg() {
