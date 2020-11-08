@@ -3,7 +3,7 @@
 
 # What is Dalted?
 
-Web-app hosted at https://dalted.tech to simulate different types of color blindness from an user-provided input image.
+Web-app hosted to simulate different types of color blindness from an user-provided input image.
 
 ## Resources
 
