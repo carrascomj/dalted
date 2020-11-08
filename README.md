@@ -11,6 +11,7 @@ Web-app that simulates different types of color blindness from an user-provided 
 2. This simulation is explained in this [awesome post](https://ixora.io/projects/colorblindness/color-blindness-simulation-research/).
 3. Back-end written in [actix-web](https://actix.rs/).
 4. Backbone and guide for building a [Rust-Web-App](https://github.com/steadylearner/Rust-Web-App/).
+5. Check more official and community [actix examples](https://github.com/actix/examples)!
 
 ## License
 
