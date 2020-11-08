@@ -5,8 +5,6 @@
 
 Web-app hosted at https://dalted.tech to simulate different types of color blindness from an user-provided input image.
 
-**IMPORTANT**: The web server will be shut down on January because the domain renewal would cost 50$, which I don't want to pay, of course. You can [Sponsor](https://github.com/sponsors/carrascomj) me, but if you really want to have this online, just clone it in your own server :).
-
 ## Resources
 
 1. The color blindness simulation implementation was inspired by [Vienot et al., 1999](http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf).
