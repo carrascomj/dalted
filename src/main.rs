@@ -11,6 +11,8 @@ use actix_files as fs;
 use actix_web::{web, App, HttpServer};
 use tera::Tera;
 
+const MAX_SIZE: usize = 3_145_728;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -23,7 +25,12 @@ async fn main() -> std::io::Result<()> {
             .service(get::index)
             .service(get::robots)
             .service(get::tea)
-            .service(web::resource("/img_upload").route(web::post().to(post::upload)))
+            .service(
+                web::resource("/img_upload")
+                    // add PayloadConfig to restrict size of POSTed images
+                    .app_data(web::PayloadConfig::default().limit(MAX_SIZE))
+                    .route(web::post().to(post::upload)),
+            )
             .service(web::scope("").wrap(errors::error_handlers()))
             .wrap(errors::error_handle_tea())
     })
