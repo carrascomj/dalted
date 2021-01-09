@@ -1,4 +1,5 @@
 use super::matrices::MATRICES;
+use super::svg::decode_svg;
 use base64::encode;
 use image::{DynamicImage, Rgba};
 use imageproc::map::map_colors;
@@ -6,12 +7,16 @@ use rayon::prelude::*;
 use std::ops::Mul;
 use ultraviolet::{Mat3, Vec3};
 
-/// Decode incoming raw bytes image into a DynamicImage object, thread safe.
+/// Decode incoming raw bytes image into a DynamicImage object.
 /// It works for all format supported by `image`.
 pub fn decode_raw_image(
     bytes: &[u8],
 ) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
-    Ok(image::load_from_memory(bytes)?)
+    Ok(match image::load_from_memory(bytes) {
+        Ok(img) => img,
+        // try rendering a possible SVG
+        Err(_) => decode_svg(bytes)?,
+    })
 }
 
 /// Transform an image by applying 5 matrix transformation that correspond to different types of

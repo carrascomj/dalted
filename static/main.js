@@ -50,6 +50,9 @@ var fileTypes = [
   "image/gif",
   "image/bmp",
   "image/x-portable-anymap",
+  // SVG will be server-side rendered and displayed as PNGs
+  "image/svg+xml",
+  "image/svg",
 ];
 
 function validFileType(file) {
