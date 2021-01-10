@@ -11,11 +11,15 @@ use ultraviolet::{Mat3, Vec3};
 /// It works for all format supported by `image`.
 pub fn decode_raw_image(
     bytes: &[u8],
-) -> Result<image::DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<DynamicImage, Box<dyn std::error::Error + Send + Sync>> {
     Ok(match image::load_from_memory(bytes) {
         Ok(img) => img,
         // try rendering a possible SVG
-        Err(_) => decode_svg(bytes)?,
+        Err(_) => image::load_from_memory_with_format(
+            decode_svg(bytes)?.as_slice(),
+            // we know that the bytes from decode_svg always correspond to PNG
+            image::ImageFormat::Png,
+        )?,
     })
 }
 
