@@ -15,11 +15,11 @@ pub fn decode_raw_image(
     Ok(match image::load_from_memory(bytes) {
         Ok(img) => img,
         // try rendering a possible SVG
-        Err(_) => image::load_from_memory_with_format(
-            decode_svg(bytes)?.as_slice(),
-            // we know that the bytes from decode_svg always correspond to PNG
-            image::ImageFormat::Png,
-        )?,
+        Err(_) => {
+            let (buf, width, height) = decode_svg(bytes)?;
+            // TODO: map this Option to .ok_or(impl Error)
+            DynamicImage::ImageRgba8(image::RgbaImage::from_raw(width, height, buf).unwrap())
+        }
     })
 }
 
