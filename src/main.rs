@@ -12,9 +12,14 @@ use actix_web::{web, App, HttpServer};
 use tera::Tera;
 
 const MAX_SIZE: usize = 3_145_728;
+const ADDR: &str = "127.0.0.1:8000";
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // handy for debugging
+    #[cfg(debug_assertions)]
+    println!("Deployed at http://{}", ADDR);
+
     HttpServer::new(|| {
         let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
 
@@ -34,7 +39,7 @@ async fn main() -> std::io::Result<()> {
             .service(web::scope("").wrap(errors::error_handlers()))
             .wrap(errors::error_handle_tea())
     })
-    .bind("127.0.0.1:8000")?
+    .bind(ADDR)?
     .run()
     .await
 }
