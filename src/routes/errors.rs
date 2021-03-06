@@ -2,7 +2,7 @@ use actix_http::{body::Body, Response};
 use actix_web::dev::ServiceResponse;
 use actix_web::http::StatusCode;
 use actix_web::middleware::errhandlers::{ErrorHandlerResponse, ErrorHandlers};
-use actix_web::{web, Result};
+use actix_web::web;
 use tera::Tera;
 
 enum Wreck {
@@ -28,28 +28,30 @@ impl Wreck {
 
 // Custom error handlers, to return HTML responses when an error occurs.
 pub fn error_handlers() -> ErrorHandlers<Body> {
-    ErrorHandlers::new().handler(StatusCode::NOT_FOUND, not_found)
+    // This would be more readable if `not_found()` returned a Result, but it
+    // would be bad practice to have a Fn -> Result which is always Ok(_)
+    ErrorHandlers::new().handler(StatusCode::NOT_FOUND, |res: ServiceResponse<_>| {
+        Ok(not_found(res))
+    })
 }
 
 // Custom error handlers, to return HTML responses when a brew operation occurs.
 pub fn error_handle_tea() -> ErrorHandlers<Body> {
-    ErrorHandlers::new().handler(StatusCode::IM_A_TEAPOT, im_a_teapot)
+    ErrorHandlers::new().handler(StatusCode::IM_A_TEAPOT, |res: ServiceResponse<_>| {
+        Ok(im_a_teapot(res))
+    })
 }
 
 // Error handler for a 404 Page not found error.
-fn not_found<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
+fn not_found<B>(res: ServiceResponse<B>) -> ErrorHandlerResponse<B> {
     let response = get_error_response(&res, Wreck::On404);
-    Ok(ErrorHandlerResponse::Response(
-        res.into_response(response.into_body()),
-    ))
+    ErrorHandlerResponse::Response(res.into_response(response.into_body()))
 }
 
 // Error handler for a 418 Page i'm a teapot.
-fn im_a_teapot<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
+fn im_a_teapot<B>(res: ServiceResponse<B>) -> ErrorHandlerResponse<B> {
     let response = get_error_response(&res, Wreck::On418);
-    Ok(ErrorHandlerResponse::Response(
-        res.into_response(response.into_body()),
-    ))
+    ErrorHandlerResponse::Response(res.into_response(response.into_body()))
 }
 
 // Generic error handler.
