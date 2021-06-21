@@ -5,7 +5,6 @@
 
 Web-app that simulates different types of color blindness from a user-provided input image.
 
-
 ## Resources
 
 1. The color blindness simulation implementation was inspired by [Vienot et al., 1999](http://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf).
