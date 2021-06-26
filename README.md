@@ -39,8 +39,17 @@ curl https://sh.rustup.rs -sSf | sh
 
 After cloning this repository, it can be run in the browser with [cargo](https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html):
 
+Download the code from GitHub:
 ```bash
 git clone https://github.com/carrascomj/dalted.git
+```
+Compile and run the code. (use 127.0.0.1:8000 by default)
+```bash
 # enable --release for optimized compilation (but slower build process)
 cargo run #--release
+```
+Run the code in a different server and port
+```bash
+# enable --release for optimized compilation (but slower build process)
+cargo run 127.0.0.1:8081 #--release
 ```
