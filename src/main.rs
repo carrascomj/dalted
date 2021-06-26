@@ -5,6 +5,7 @@ extern crate serde_derive;
 mod image_processing;
 mod routes;
 use crate::routes::{errors, get, post};
+use std::env;
 
 // tera
 use actix_files as fs;
@@ -12,13 +13,19 @@ use actix_web::{web, App, HttpServer};
 use tera::Tera;
 
 const MAX_SIZE: usize = 3_145_728;
-const ADDR: &str = "127.0.0.1:8000";
+const DEFAULT_ADDR: &str = "127.0.0.1:8000";
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let mut addr: &str = DEFAULT_ADDR;
+    // get server:port address if defined as part of the command line
+    let args: Vec<String> = env::args().collect();
+    if args.len() > 1 {
+        addr = &args[1];
+    }
     // handy for debugging
     #[cfg(debug_assertions)]
-    println!("Deployed at http://{}", ADDR);
+    println!("Deployed at http://{}", addr);
 
     HttpServer::new(|| {
         let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
@@ -39,7 +46,7 @@ async fn main() -> std::io::Result<()> {
             .service(web::scope("").wrap(errors::error_handlers()))
             .wrap(errors::error_handle_tea())
     })
-    .bind(ADDR)?
+    .bind(addr)?
     .run()
     .await
 }
