@@ -34,7 +34,7 @@ pub fn pipe_matrix_multiplication(
 ) -> Result<Vec<String>, Box<dyn std::error::Error + Send + Sync>> {
     Ok(MATRICES
         .par_iter()
-        .map(|mat| color_filter(&img, Mat3::from(*mat)).expect("works"))
+        .map(|mat| color_filter(img, Mat3::from(*mat)).expect("works"))
         .collect::<Vec<String>>())
 }
 
