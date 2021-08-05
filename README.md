@@ -3,7 +3,7 @@
 
 # What is Dalted?
 
-Web-app that simulates different types of color blindness from an user-provided input image.
+Web-app that simulates different types of color blindness from a user-provided input image.
 
 ## Resources
 
