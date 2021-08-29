@@ -1,85 +1,23 @@
-use actix_http::{body::Body, Response};
-use actix_web::dev::ServiceResponse;
-use actix_web::http::StatusCode;
-use actix_web::middleware::errhandlers::{ErrorHandlerResponse, ErrorHandlers};
-use actix_web::web;
-use tera::Tera;
+use rocket::{http::RawStr, Request, serde::Serialize};
+use rocket_dyn_templates::Template;
 
-enum Wreck {
-    On418,
-    On404,
+#[derive(Serialize)]
+struct CatchPathMap<'a> {
+    path: &'a RawStr,
 }
 
-impl Wreck {
-    fn err_string(&self) -> &str {
-        match *self {
-            Wreck::On418 => "MAY be short and stdout",
-            Wreck::On404 => "Page not found",
-        }
-    }
-
-    fn err_file(&self) -> &str {
-        match *self {
-            Wreck::On404 => "not-found.html",
-            Wreck::On418 => "im-a-teapot.html",
-        }
-    }
-}
-
-// Custom error handlers, to return HTML responses when an error occurs.
-pub fn error_handlers() -> ErrorHandlers<Body> {
-    // This would be more readable if `not_found()` returned a Result, but it
-    // would be bad practice to have a Fn -> Result which is always Ok(_)
-    ErrorHandlers::new().handler(StatusCode::NOT_FOUND, |res: ServiceResponse<_>| {
-        Ok(not_found(res))
-    })
-}
-
-// Custom error handlers, to return HTML responses when a brew operation occurs.
-pub fn error_handle_tea() -> ErrorHandlers<Body> {
-    ErrorHandlers::new().handler(StatusCode::IM_A_TEAPOT, |res: ServiceResponse<_>| {
-        Ok(im_a_teapot(res))
-    })
-}
-
-// Error handler for a 404 Page not found error.
-fn not_found<B>(res: ServiceResponse<B>) -> ErrorHandlerResponse<B> {
-    let response = get_error_response(&res, Wreck::On404);
-    ErrorHandlerResponse::Response(res.into_response(response.into_body()))
-}
-
-// Error handler for a 418 Page i'm a teapot.
-fn im_a_teapot<B>(res: ServiceResponse<B>) -> ErrorHandlerResponse<B> {
-    let response = get_error_response(&res, Wreck::On418);
-    ErrorHandlerResponse::Response(res.into_response(response.into_body()))
-}
-
-// Generic error handler.
-fn get_error_response<B>(res: &ServiceResponse<B>, error: Wreck) -> Response<Body> {
-    let request = res.request();
-
-    // Provide a fallback to a simple plain text response in case an error occurs during the
-    // rendering of the error page.
-    let fallback = |e: &str| {
-        Response::build(res.status())
-            .content_type("text/plain")
-            .body(e.to_string())
+#[catch(404)]
+pub fn catch_not_found(req: &Request) -> Template {
+    let map = CatchPathMap {
+        path: req.uri().path().raw(),
     };
+    Template::render("not-found", &map)
+}
 
-    let tera = request.app_data::<web::Data<Tera>>().map(|t| t.get_ref());
-    match tera {
-        Some(tera) => {
-            let mut context = tera::Context::new();
-            context.insert("path", res.request().path());
-            let body = tera.render(error.err_file(), &context);
-
-            match body {
-                Ok(body) => Response::build(res.status())
-                    .content_type("text/html")
-                    .body(body),
-                Err(_) => fallback(error.err_string()),
-            }
-        }
-        None => fallback(error.err_string()),
-    }
+#[catch(418)]
+pub fn catch_teapot(req: &Request) -> Template {
+    let map = CatchPathMap {
+        path: req.uri().path().raw(),
+    };
+    Template::render("im-a-teapot", &map)
 }

@@ -1,5 +1,11 @@
 use crate::image_processing::{decode_raw_image, pipe_matrix_multiplication};
-use actix_web::{web, Error, HttpResponse};
+use rocket::data::{Data, ToByteUnit};
+use rocket::http::Status;
+use rocket::response::status;
+use rocket::serde::{json::Json, Serialize};
+use rocket::tokio::task::spawn_blocking;
+
+const MAX_SIZE: usize = 3;
 
 #[derive(Serialize)]
 pub struct Images {
@@ -9,12 +15,22 @@ pub struct Images {
 }
 
 /// Receive an image and respond with a vector of 5 transformed images
-pub async fn upload(bytes: web::Bytes) -> Result<HttpResponse, Error> {
+#[post("/img_upload", data = "<bytes>")]
+pub async fn upload<'a>(bytes: Data<'_>) -> Result<Json<Images>, status::Custom<String>> {
     // decode raw stream
-    let image = web::block(move || decode_raw_image(&bytes)).await?;
-    // backend logic here
-    let images = web::block(move || pipe_matrix_multiplication(&image)).await?;
-    Ok(HttpResponse::Ok().json(Images {
+    let bytes = bytes
+        .open(MAX_SIZE.mebibytes())
+        .into_bytes()
+        .await
+        .map_err(|e| status::Custom(Status::NotAcceptable, e.to_string()))?;
+    let images = spawn_blocking(move || {
+        pipe_matrix_multiplication(&decode_raw_image(bytes.into_inner().as_slice())?)
+    })
+    .await
+    // not sure about how to do this properly
+    .map_err(|e| status::Custom(Status::NotAcceptable, e.to_string()))?
+    .map_err(|e| status::Custom(Status::NotAcceptable, e.to_string()))?;
+    Ok(Json(Images {
         file_type: String::from("image/png"),
         images,
         message: String::from("OK!"),
@@ -24,8 +40,8 @@ pub async fn upload(bytes: web::Bytes) -> Result<HttpResponse, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use actix_web::HttpResponse;
     use image::io::Reader;
+    use rocket::serde::json::Json;
 
     #[test]
     fn test_post() {
@@ -34,7 +50,7 @@ mod tests {
             .decode()
             .unwrap();
         let images = pipe_matrix_multiplication(&image).unwrap();
-        HttpResponse::Ok().json(Images {
+        Json(Images {
             file_type: String::from("image/png"),
             images,
             message: String::from("OK!"),
