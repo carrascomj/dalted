@@ -1,4 +1,4 @@
-use rocket::{http::RawStr, Request, serde::Serialize};
+use rocket::{http::RawStr, serde::Serialize, Request};
 use rocket_dyn_templates::Template;
 
 #[derive(Serialize)]
